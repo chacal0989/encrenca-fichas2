@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Encrenca! RPG de Bolso</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&display=swap">
+<style>
+:root{--bg:#f1eff8;--fg:#1d1b2e;--card:#fff;--ac:#5b2fc9;--ac2:#f2c230;--mut:#6a6780;--bd:#d9d5ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15131f;--fg:#ece9f7;--card:#211e30;--ac:#a98bff;--ac2:#f2c230;--mut:#9f9bb8;--bd:#383350;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15131f;--fg:#ece9f7;--card:#211e30;--ac:#a98bff;--ac2:#f2c230;--mut:#9f9bb8;--bd:#383350;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:12px 14px 40px}
+h1,h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;margin:0}
+h1{font-size:26px;font-weight:800}
+h2{font-size:18px;margin:18px 0 8px}
+#secF .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#secF .top span{color:var(--mut);font-size:14px}
+#secF nav{display:flex;gap:6px;margin:12px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:6px 0;z-index:5}
+#secF nav button{flex:1;padding:10px 4px;border:2px solid var(--bd);background:var(--card);color:var(--fg);border-radius:10px;font:inherit;font-weight:600}
+#secF nav button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+#secF .g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+#secF .g4{grid-template-columns:repeat(4,1fr)}
+#secF label{display:block;font-size:13px;color:var(--mut)}
+#secF input,#secF select,#secF textarea{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secF textarea{min-height:84px;resize:vertical}
+#secF button{font:inherit;cursor:pointer}
+#secF .b{padding:11px 14px;border:0;border-radius:10px;background:var(--ac);color:#fff;font-weight:600;width:100%;margin-top:8px}
+#secF .b.s{background:var(--ac2);color:#1d1b2e}
+#secF .b.x{background:transparent;color:var(--mut);border:2px solid var(--bd)}
+#secF .hint{background:var(--card);border-left:5px solid var(--ac2);padding:8px 10px;border-radius:6px;font-size:14px;margin-top:10px}
+#secF ul{list-style:none;padding:0;margin:8px 0}
+#secF li{display:flex;justify-content:space-between;gap:8px;align-items:center;background:var(--card);border:2px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+#secF li button{border:0;background:none;color:var(--mut);font-size:18px}
+#secF .hh{font-size:12px;color:var(--mut)}
+#secF .row{display:flex;gap:8px}#secF .row input{flex:1}#secF .row .b{width:auto;margin:3px 0 0}
+#secT nav{display:flex;gap:6px;margin:12px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:6px 0;z-index:5}
+#secT nav button{flex:1;padding:10px 4px;border:2px solid var(--bd);background:var(--card);color:var(--fg);border-radius:10px;font:inherit;font-weight:600}
+#secT nav button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+#secT .g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+#secT .g2{grid-template-columns:repeat(2,1fr)}
+#secT label{display:block;font-size:13px;color:var(--mut)}
+#secT input,#secT select,#secT textarea{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secT input[type=checkbox]{width:auto;margin-right:6px}
+#secT textarea{min-height:200px}
+#secT button{font:inherit;cursor:pointer}
+#secT .d{padding:18px 0;border:0;border-radius:12px;background:var(--ac);color:#fff;font:800 22px "Bricolage Grotesque",system-ui,sans-serif}
+#secT .b{padding:11px 14px;border:0;border-radius:10px;background:var(--ac);color:#fff;font-weight:600;width:100%;margin-top:8px}
+#secT .b.s{background:var(--ac2);color:#1d1b2e}#secT .b.x{background:transparent;color:var(--mut);border:2px solid var(--bd)}
+#secT .res{background:var(--card);border:2px solid var(--ac2);border-radius:12px;padding:14px;margin:14px 0;text-align:center}
+#secT .res b{display:block;font:800 44px "Bricolage Grotesque",system-ui,sans-serif}
+#secT .res small{color:var(--mut)}
+#secT .warn{color:#c0392b;font-weight:600}
+#secT ul{list-style:none;padding:0;margin:8px 0}
+#secT li{background:var(--card);border:2px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+#secT li.hit{border-color:var(--ac2);background:var(--ac2);color:#1d1b2e;font-weight:600}
+#secT .t{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;color:var(--fg);cursor:pointer}
+#secT .t em{color:var(--mut);font-style:normal;font-size:13px}
+#secT .hint{font-size:14px;color:var(--mut);margin:6px 0}
+#top{display:flex;gap:6px;margin:12px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:6px 0;z-index:5}
+#top button{flex:1;padding:12px 4px;border:2px solid var(--bd);background:var(--card);color:var(--fg);border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+#top button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+#secF nav{position:static}
+#navT{display:none!important}
+#secF[hidden],#secT[hidden],#secB[hidden]{display:none}
+#secB .b{padding:11px 14px;border:0;border-radius:10px;background:var(--ac);color:#fff;width:100%;margin-top:8px;font:inherit;font-weight:600;cursor:pointer}
+#secB .b.x{background:transparent;color:var(--mut);border:2px solid var(--bd)}
+#secB .hint{background:var(--card);border-left:5px solid var(--ac2);padding:8px 10px;border-radius:6px;font-size:14px;margin-top:10px}
+#secB .pc{background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px 12px;margin-top:10px}
+#secB .ph{display:flex;gap:8px;align-items:baseline}
+#secB .ph span{color:var(--mut);font-size:14px;flex:1}
+#secB .ph button{border:0;background:none;color:var(--mut);font-size:18px;cursor:pointer}
+#secB .bar{height:12px;background:var(--bd);border-radius:6px;margin:8px 0;overflow:hidden}
+#secB .bar i{display:block;height:100%}
+#secB .hh{font-size:13px;color:var(--mut)}
+#secB label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
+#secB select{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secB .st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+#secB .st div{background:var(--bg);border-radius:8px;padding:6px 2px;text-align:center;font-size:12px;color:var(--mut)}
+#secB .st b{display:block;font:800 24px "Bricolage Grotesque",system-ui,sans-serif;color:var(--fg)}
+#secB input{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secB input[type=checkbox]{width:auto;margin-right:6px}
+#secB .g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+#secB .b.s{background:var(--ac2);color:#1d1b2e}
+#secB ul{list-style:none;padding:0;margin:8px 0}
+#secB li{background:var(--card);border:2px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+#secB .code{font:800 30px "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:5px}
+#secB .tag{background:var(--ac2);color:#1d1b2e;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:700;flex:0 0 auto!important}
+#secD .b{padding:11px 14px;border:0;border-radius:10px;background:var(--ac);color:#fff;width:100%;margin-top:8px;font:inherit;font-weight:600;cursor:pointer}
+#secD .b.x{background:transparent;color:var(--mut);border:2px solid var(--bd)}
+#secD .hint{background:var(--card);border-left:5px solid var(--ac2);padding:8px 10px;border-radius:6px;font-size:14px;margin-top:10px}
+#secD .pc{background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px 12px;margin-top:10px}
+#secD .ph{display:flex;gap:8px;align-items:baseline}
+#secD .ph span{color:var(--mut);font-size:14px;flex:1}
+#secD .ph button{border:0;background:none;color:var(--mut);font-size:18px;cursor:pointer}
+#secD .bar{height:12px;background:var(--bd);border-radius:6px;margin:8px 0;overflow:hidden}
+#secD .bar i{display:block;height:100%}
+#secD .hh{font-size:13px;color:var(--mut)}
+#secD label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
+#secD select{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secD .st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+#secD .st div{background:var(--bg);border-radius:8px;padding:6px 2px;text-align:center;font-size:12px;color:var(--mut)}
+#secD .st b{display:block;font:800 24px "Bricolage Grotesque",system-ui,sans-serif;color:var(--fg)}
+#secD input{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secD input[type=checkbox]{width:auto;margin-right:6px}
+#secD .g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+#secD .b.s{background:var(--ac2);color:#1d1b2e}
+#secD ul{list-style:none;padding:0;margin:8px 0}
+#secD li{background:var(--card);border:2px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+#secD .code{font:800 30px "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:5px}
+#secD .tag{background:var(--ac2);color:#1d1b2e;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:700;flex:0 0 auto!important}
+#secD .mp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 4px}
+#secD .cl{aspect-ratio:1;border-radius:10px;border:2px solid transparent;display:flex;align-items:center;justify-content:center;font:800 22px "Bricolage Grotesque",system-ui,sans-serif;background:var(--card);color:var(--fg);cursor:default}
+#secD .cl.x{visibility:hidden}
+#secD .cl.d{border:2px dashed var(--ac);cursor:pointer;color:var(--ac)}
+#secD .cl.v{border-color:var(--bd);cursor:pointer}
+#secD .cl.on{background:var(--ac2);color:#1d1b2e;border-color:var(--ac2)}
+#secD details{margin:6px 0}
+#secD p{margin:6px 0}
+#top button{padding:12px 2px;font-size:13px}
+#secA .b{padding:11px 14px;border:0;border-radius:10px;background:var(--ac);color:#fff;width:100%;margin-top:8px;font:inherit;font-weight:600;cursor:pointer}
+#secA .b.x{background:transparent;color:var(--mut);border:2px solid var(--bd)}
+#secA .hint{background:var(--card);border-left:5px solid var(--ac2);padding:8px 10px;border-radius:6px;font-size:14px;margin-top:10px}
+#secA .pc{background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px 12px;margin-top:10px}
+#secA .ph{display:flex;gap:8px;align-items:baseline}
+#secA .ph span{color:var(--mut);font-size:14px;flex:1}
+#secA .ph button{border:0;background:none;color:var(--mut);font-size:18px;cursor:pointer}
+#secA .bar{height:12px;background:var(--bd);border-radius:6px;margin:8px 0;overflow:hidden}
+#secA .bar i{display:block;height:100%}
+#secA .hh{font-size:13px;color:var(--mut)}
+#secA label{display:block;font-size:13px;color:var(--mut);margin-top:8px}
+#secA select{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secA .st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+#secA .st div{background:var(--bg);border-radius:8px;padding:6px 2px;text-align:center;font-size:12px;color:var(--mut)}
+#secA .st b{display:block;font:800 24px "Bricolage Grotesque",system-ui,sans-serif;color:var(--fg)}
+#secA input{width:100%;box-sizing:border-box;margin-top:3px;padding:9px;border:2px solid var(--bd);border-radius:8px;background:var(--card);color:var(--fg);font:inherit}
+#secA input[type=checkbox]{width:auto;margin-right:6px}
+#secA .g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+#secA .b.s{background:var(--ac2);color:#1d1b2e}
+#secA ul{list-style:none;padding:0;margin:8px 0}
+#secA li{background:var(--card);border:2px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+#secA .code{font:800 30px "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:5px}
+#secA .tag{background:var(--ac2);color:#1d1b2e;border-radius:6px;padding:1px 8px;font-size:12px;font-weight:700;flex:0 0 auto!important}
+#secA p{margin:6px 0}
+#secB .dead{opacity:.55}
+#top{flex-wrap:wrap}
+#top button{flex:1 1 30%}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+#secT .res b.pop{animation:pop .5s}
+@media(prefers-reduced-motion:reduce){#secT .res b.pop{animation:none}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:20px;z-index:50;font-size:14px}
+#secO .pc{background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px 12px;margin-top:10px}
+#secO .ph{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+#secO .ph span{color:var(--mut);font-size:14px;flex:1}
+#secO .bar{height:12px;background:var(--bd);border-radius:6px;margin:8px 0;overflow:hidden}
+#secO .bar i{display:block;height:100%}
+#secO .hh{font-size:13px;color:var(--mut)}
+#secO .hint{background:var(--card);border-left:5px solid var(--ac2);padding:8px 10px;border-radius:6px;font-size:14px;margin-top:10px}
+#secO .st{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+#secO .st div{background:var(--bg);border-radius:8px;padding:6px 2px;text-align:center;font-size:12px;color:var(--mut)}
+#secO .st b{display:block;font:800 22px "Bricolage Grotesque",system-ui,sans-serif;color:var(--fg)}
+#secO details{margin:8px 0}#secO summary{cursor:pointer;font-weight:600}#secO p{margin:6px 0;font-size:14px}
+</style></head><body><main>
+<h1>Encrenca!</h1><nav id="top"></nav>
+<section id="secF"><div class="top"><span id="sub"></span></div><nav id="navF"></nav><div id="appF"></div></section>
+<section id="secT" hidden><nav id="navT"></nav><div id="appT"></div></section>
+<section id="secB" hidden><div id="appB"></div></section>
+<section id="secD" hidden><div id="appD"></div></section>
+<section id="secA" hidden><div id="appA"></div></section>
+<section id="secO" hidden><div id="appO"></div></section></main>
+<script>
+
+const D=["d4","d6","d8","d10","d12"],A={M:"Músculo",R:"Reflexo",I:"Miolo",L:"Lábia"};
+const LB={nome:"Nome",apelido:"Apelido",raca:"Raça",classe:"Classe",nivel:"Nível",M:"Músculo",R:"Reflexo",I:"Miolo",L:"Lábia",vida:"Vida",vidaMax:"Vida máx.",pm:"PM",pmMax:"PM máx.",ps:"Pontos de Sorte",arm:"Armadura",cobres:"Cobres",pericias:"Perícias",talentos:"Talentos",magias:"Magias",notas:"Notas"};
+const RA=[["Humano","*",0,"Teimoso: começa a sessão com 3 Pontos de Sorte"],["Anão","M",3,"Casca Grossa: vantagem contra veneno e bebidas fortes"],["Elfo","R",0,"Olhos de Coruja: vê no escuro; vantagem em Miolo para perceber"],["Orc","M",2,"Fúria: 1x/cena dobra o dado de dano de um ataque"],["Gnomo","I",0,"Engenhoca: 1 Tralha extra; vantagem para consertar e inventar"],["Brejeiro","L",0,"Pele Escorregadia: vantagem para escapar e nadar; salta o dobro"],["Pequenino","L",0,"Sortudo: 1x/sessão repete um dado sem gastar PS"],["Felino","R",0,"Caindo de Pé: ignora queda; 1x/dia repete Reflexo"],["Draconiano","M",0,"Sopro de Fumaça: 1x/cena 1d6 em cone curto"],["Ossudo","I",0,"Ossos Duros: imune a veneno e sono; -1 dano cortante"],["Pixie","R",-2,"Asinhas: voa 6 m por turno"],["Pedrês","M",0,"Pele de Pedra: +1 para se defender; desvantagem em Esgueirar"],["Fungoide","I",0,"Esporos: 1x/cena desvantagem a quem está a 3 m"],["Diabrete","L",0,"Fogo no Sangue: imune a fogo; 1x/dia cospe chama 1d6"]];
+const CL=`Briguento|12|0|M|Lutar, Aguentar, Intimidar|Arma pesada (d8), Armadura média (+2)|Pancada Boa: 1x/cena, um ataque com dano dobrado|Casca Dura: -1 em todo dano sofrido;Briga de Bar: objeto vira arma d6, vantagem para agarrar;Segundo Fôlego: 1x/dia cura 1d6 + nível;Rodopio: um ataque atinge todos ao alcance;Grito de Guerra: aliados com vantagem no 1º ataque
+Larápio|8|0|R|Furtar, Esgueirar, Arrombar|2 adagas (d4), Armadura leve (+1), Gazua|Golpe Sujo: +1d6 de dano contra alvo distraído|Mãos Leves: pega ou troca objeto sem teste;Sombra: vantagem para se esconder no escuro;Rolê Rápido: move e esconde no mesmo turno;Faca Voadora: adagas arremessadas +1d4;Sorte de Ladrão: +1 Ponto de Sorte na sessão
+Arcano|6|4|I|Estudar, Alquimia, Arcanismo|Cajado (d4), Grimório de bolso|Magia Básica: conhece 3 magias do Grimório (A)|Foco Arcano: +2 PM;Mente Aberta: aprende 2 magias;Ritual: 1x/dia magia em 10 min sem PM;Poder Extra: +1 PM dobra dano ou duração;Rabisco Veloz: conjura sem falar nem gesticular
+Devoto|9|3|I|Curar, Rezar, Persuadir|Maça (d6), Armadura média (+2), Símbolo sagrado|Mãos Santas: 1x/cena cura 1d6 ao toque; 2 magias (D)|Armadura de Fé: +1 para se defender;Bênção Dobrada: Bênção em 2 aliados;Expulsar: mortos-vivos fogem (Miolo vs 7);Cura Maior: Cura Leve +1d6;Escudo Divino: 1x/dia anula ataque a aliado
+Rastreador|8|2|R|Rastrear, Sobreviver, Mirar|Arco curto (d6), Armadura leve (+1)|Parceiro Peludo: bichinho (4 Vida) dá vantagem 1x/cena; 2 magias (R)|Tiro Preciso: +1d4 à distância;Armadilha Caseira: monta em 1 minuto;Camuflagem: vantagem para se esconder na natureza;Passo Leve: sem rastros nem barulho;Flecha Dupla: 2 disparos (o 2º em desvantagem)
+Farsante|7|2|L|Enganar, Atuar, Tocar|Espada curta (d6), Instrumento musical|Inspiração: 1x/cena dá vantagem a um aliado; 2 magias (F)|Plateia Cativa: vantagem em Lábia contra grupos;Disfarce Perfeito: vantagem em Enganar disfarçado;Música Mágica: aliados +1 nos testes;Fanfarrão: intimida ou mente com vantagem;Cara Dura: 1x/cena ignora uma desvantagem
+Selvagem|14|0|M|Lutar, Escalar, Intimidar|Machado de duas mãos (d10), Peles (+1)|Fúria: 1x/cena, 1 min: +1 degrau no dano corpo a corpo, -1 para se defender|Pele Grossa: em fúria, -1 de dano sofrido;Salto Selvagem: salta 6 m e ataca;Grito Aterrorizante: inimigos fracos fogem (Dif. 5);Sede de Sangue: cura 1d4 ao derrubar inimigo;Fúria Dupla: usa a Fúria 2 vezes por cena
+Alquimista|7|2|I|Alquimia, Estudar, Consertar|3 frascos, Bandoleira, Adaga (d4)|Frascos de Bolso: 3 frascos por descanso (cura 1d6, bomba 1d6 ou fumaça)|Mistura Forte: +1 dado nos frascos;Antídoto: frasco cura veneno e doenças;Granada de Gelo: alvo em desvantagem 1 cena;Pele de Pedra: +1 para se defender (1 cena);Gosma Escorregadia: derruba tudo em 3 m (Dif. 6)
+Monge Maluco|10|2|R|Lutar, Equilibrar, Meditar|Faixa, Bastão de bambu (d4)|Punhos de Aço: desarmado d6 (Reflexo); 2 ataques 1x/cena (PM = Ki)|Passo Leve: anda sobre água e paredes 1 turno;Golpe Atordoante: alvo perde a ação (Músculo Dif. 7);Mente Calma: vantagem contra medo, charme e ilusões;Salto da Garça: salta até 9 m;Mil Punhos: 1x/dia 3 ataques numa ação
+Cavaleiro|12|1|M|Lutar, Cavalgar, Persuadir|Espada (d6), Escudo (+1), Cota de malha (+2)|Juramento: 1x/cena recebe o dano de um aliado (PM = Fé)|Montaria: cavalo, movimento dobrado;Grito de Honra: aliados +1 no 1º ataque;Carga Cavaleiresca: +1d6 após andar 6 m;Cura pelas Mãos: 1x/dia cura 1d6;Aura de Coragem: aliados imunes a medo
+Necromante|6|4|I|Estudar, Ocultismo, Intimidar|Cajado com caveira (d4), Grimório negro|Levantar Esqueleto: 1x/cena ergue 1 esqueleto (Vida 4, Ataque 4, d4); 3 magias (A)|Mais Ossos: ergue 2 esqueletos;Toque Gélido: +1d6 de frio corpo a corpo;Dreno de Vida: cura metade do dano causado;Servo Fiel: esqueletos +4 de Vida;Morte Rápida: alvo com 5 ou menos de Vida morre (Miolo Dif. 6)
+Druida|8|3|I|Natureza, Curar, Falar com Bichos|Cajado (d4), Foice (d6)|Forma Animal: 1x/cena bicho pequeno por 1 min (+4 Vida, ataque d6); 2 magias (R ou D)|Forma Grande: vira urso, d8 e +8 de Vida;Mãos Verdes: cura 1d6 com ervas após descanso curto;Chamar Bicho: animal amigo ajuda 1 cena;Pele de Casca: +1 para se defender;Tempestade Amiga: 1x/dia raios 2d6 em um alvo
+Pirata|10|0|R|Lutar, Navegar, Blefar|Sabre (d6), Pistola (d6)|Sorte de Pirata: 1x/cena repete 1 dado de ataque|Pistoleiro: 2 tiros numa ação (o 2º em desvantagem);Papagaio Espião: sem surpresa contra o grupo;Abordagem: salta no alvo com vantagem no ataque;Tesouro Escondido: 50% a mais de cobres;Lábia do Mar: vantagem em Lábia com marinheiros
+Engenheiro|8|1|I|Consertar, Inventar, Mecânica|Chave inglesa (d6), Mochila de engenhocas|Engenhoca do Dia: 1 engenhoca por descanso longo (PM = Vapor)|Torre de Mola: torre (Vida 6, d6) por 1 cena;Golem de Bolso: vantagem em 1 teste por cena;Mochila a Vapor: voa 1 min, 1x/dia;Granada de Mola: 2d6 em 3 m (Dif. 6);Canhão de Mão: arma à distância d10`.split("\n").map(l=>{const p=l.split("|");return{n:p[0],v:+p[1],pm:+p[2],k:p[3],p:p[4],e:p[5].split(", "),t:p[6],ev:p[7].split(";")}});
+const KF="encrenca-ficha-v1";let tabF="f",s;
+const blank=()=>({nome:"",apelido:"",raca:"Humano",classe:"Briguento",nivel:1,M:0,R:0,I:0,L:0,vida:8,vidaMax:8,pm:0,pmMax:0,ps:2,arm:0,cobres:0,pericias:"",talentos:"",magias:"",notas:"",itens:[],grim:[],cm:[],h:[]});
+const KL="encrenca-fichas-v2";var FL={cur:"a",list:{}};
+try{const o=JSON.parse(localStorage.getItem(KL));if(o&&o.list)FL=o}catch(e){}
+try{s=FL.list[FL.cur]||JSON.parse(localStorage.getItem(KF))}catch(e){}
+s=Object.assign(blank(),s||{});for(const k in A)if(typeof s[k]!="number")s[k]=0;
+const save=()=>{try{FL.list[FL.cur]=s;localStorage.setItem(KL,JSON.stringify(FL))}catch(e){}try{window.OBpush&&OBpush()}catch(e){}};
+const esc=v=>String(v).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const log=t=>{s.h.unshift({d:Date.now(),t});s.h=s.h.slice(0,300);save()};
+const fv=v=>v===""?"(vazio)":String(v).replace(/\n/g," / ").slice(0,60);
+function set(k,v,l){const o=s[k];if(o===v)return;s[k]=v;log((l||LB[k]||k)+": "+fv(o)+" → "+fv(v))}
+const num=(k,l)=>`<label>${l}<input type="number" inputmode="numeric" data-n="1" data-k="${k}" value="${esc(s[k])}"></label>`;
+const txt=(k,l)=>`<label>${l}<input data-k="${k}" value="${esc(s[k])}"></label>`;
+const area=(k,l)=>`<label>${l}<textarea data-k="${k}">${esc(s[k])}</textarea></label>`;
+const sel=(k,l,o)=>`<label>${l}<select data-k="${k}">${o.map(x=>`<option${x==s[k]?" selected":""}>${x}</option>`).join("")}</select></label>`;
+const cls=()=>CL.find(c=>c.n==s.classe),rac=()=>RA.find(r=>r[0]==s.raca);
+const roll=n=>1+Math.floor(Math.random()*n);
+function fill(){
+ if(!arguments[0]&&!confirm("Preencher substitui atributos, Vida, PM, perícias, talentos e itens pela raça e classe escolhidas. Continuar?"))return;
+ const c=cls(),r=rac(),at={};
+ for(const k in A)at[k]=roll(4);
+ log("Atributos rolados (d4): "+Object.keys(A).map(k=>A[k]+" "+at[k]).join(", "));
+ const b=r[1]=="*"?c.k:r[1];at[b]+=1;
+ for(const k in A)set(k,at[k]);
+ const vm=Math.max(1,c.v+r[2]);
+ set("nivel",1);set("vidaMax",vm);set("vida",vm);set("pmMax",c.pm);set("pm",c.pm);
+ set("ps",s.raca=="Humano"?3:2);set("pericias",c.p);
+ set("talentos",c.t+"\nRaça - "+r[3]);
+ s.itens=c.e.slice();
+ set("arm",c.e.join(" ").replace(/\(\+(\d)\)/g,(m,n)=>"+"+n).split("+").slice(1).reduce((a,x)=>a+(+x[0]||0),0));
+ set("cobres",roll(6)+roll(6));
+ log("Inventário preenchido pela classe: "+c.e.join(", "));
+ drawF()}
+function rest(l){
+ if(l){set("vida",s.vidaMax);set("pm",s.pmMax);set("ps",s.raca=="Humano"?3:2);log("Descanso longo")}
+ else{set("vida",Math.min(s.vidaMax,s.vida+roll(6)));set("pm",Math.min(s.pmMax,s.pm+1));log("Descanso curto")}
+ drawF()}
+function up(){
+ const t=document.getElementById("tl").value,a=document.getElementById("at"),n=s.nivel+1;
+ set("nivel",n);set("vidaMax",s.vidaMax+4);set("vida",s.vida+4);
+ if(s.pmMax>0){set("pmMax",s.pmMax+1);set("pm",s.pm+1)}
+ if(t)set("talentos",s.talentos+(s.talentos?"\n":"")+t);
+ if(a&&a.value)set(a.value,s[a.value]+1,A[a.value])
+ drawF()}
+let castMsg="";
+const CLL={Arcano:"A",Necromante:"A",Devoto:"D",Rastreador:"R",Druida:"R D",Farsante:"F"};
+const grim=()=>(T.find(x=>x.t=="Grimório de magias")||{i:[]}).i.map(l=>{const a=l.indexOf(" ("),b=l.indexOf(" PM): "),c=l.slice(a+2,b).split(", ");return{n:l.slice(0,a),c:c[0],pm:+c[1],e:l.slice(b+6)}}).concat((s.cm||[]).map(x=>({n:x.n,c:"",pm:x.pm,e:x.e,u:1})));
+function learn(){const v=document.getElementById("ns").value;if(!v)return;s.grim.push(v);log("Magia aprendida: "+v);drawF()}
+function forget(i){const n=s.grim[i];s.cm=(s.cm||[]).filter(x=>x.n!=n);log("Magia removida: "+n);s.grim.splice(i,1);drawF()}
+function mk(){
+ const n=document.getElementById("cn").value.trim(),pm=Math.round(+document.getElementById("cp").value),e=document.getElementById("ce").value.trim();
+ if(!n)return alert("Dê um nome à magia.");
+ if(!(pm>=1&&pm<=10))return alert("O custo em PM deve ser de 1 a 10.");
+ if(!e)return alert("Descreva o efeito da magia.");
+ if(grim().some(x=>x.n.toLowerCase()==n.toLowerCase()))return alert("Já existe uma magia com esse nome.");
+ if(!s.cm)s.cm=[];s.cm.push({n,pm,e});s.grim.push(n);log("Magia criada: "+n+" ("+pm+" PM): "+e);drawF()}
+function cast(i){
+ const sp=grim().find(x=>x.n==s.grim[i]);if(!sp)return;
+ if(sp.pm>=3&&s.nivel<2)return alert("Magias de custo 3 ou 4 só podem ser conjuradas a partir do nível 2.");
+ if(s.pm<sp.pm)return alert("PM insuficiente: esta magia custa "+sp.pm+".");
+ const k=s.classe=="Farsante"?"L":"I",n=rnd(20),tot=n+s[k],win=n>1&&tot>=5,cost=win?sp.pm:Math.floor(sp.pm/2);
+ let t=sp.n+": d20 "+n+" + "+A[k]+" "+s[k]+" = "+tot+" contra Dif. 5. "+(n==1?"Natural 1! ":"")+(win?"Funcionou: "+sp.e+".":"Falhou: nada acontece.");
+ if(n==1){const p=T.find(x=>x.t=="Pifa de magia");t+=" Pifa de Magia: "+p.i[rnd(20)-1]+"."}
+ t+=" Gastou "+cost+" PM.";
+ set("pm",s.pm-cost);log("Conjurou "+sp.n+": "+(win?"sucesso":"falha")+" (d20 "+n+")");
+ castMsg=t;try{window.OBroll&&OBroll((s.nome||"Alguém")+" conjurou "+t.slice(0,200),n==1)}catch(e){}drawF()}
+async function copyEl(e,msg){e.select();let ok=false;try{await navigator.clipboard.writeText(e.value);ok=true}catch(x){try{ok=document.execCommand("copy")}catch(y){}}alert(ok?msg:"Não consegui copiar sozinho. Selecione o texto da caixa e copie.")}
+function bkGet(){const e=document.getElementById("bkt");e.value=JSON.stringify(s);copyEl(e,"Backup copiado. Guarde em um lugar seguro, como uma conversa com você mesmo.")}
+function bkTxt(){const e=document.getElementById("bkt"),L=[(s.nome||"Sem nome")+(s.apelido?" “"+s.apelido+"”":"")+": "+s.raca+" "+s.classe+", nível "+s.nivel,"Atributos: "+Object.keys(A).map(k=>A[k]+" "+s[k]).join(", "),"Vida "+s.vida+"/"+s.vidaMax+" · PM "+s.pm+"/"+s.pmMax+" · Sorte "+s.ps+" · Armadura +"+s.arm+" · Cobres "+s.cobres,"Perícias: "+s.pericias,"Talentos: "+s.talentos.split("\n").join("; "),"Magias: "+s.grim.join(", "),"Itens: "+s.itens.join(", "),"Notas: "+s.notas];e.value=L.join("\n");copyEl(e,"Resumo copiado.")}
+function bkSet(){
+ const v=document.getElementById("bkt").value.trim();let o;
+ try{o=JSON.parse(v)}catch(x){return alert("Esse texto não parece um backup válido.")}
+ if(!o||typeof o!="object"||!o.classe||!o.raca)return alert("Esse texto não parece um backup de ficha.");
+ if(!confirm("Restaurar substitui a ficha atual. Continuar?"))return;
+ s=Object.assign(blank(),o);for(const k in A)if(typeof s[k]!="number")s[k]=0;
+ if(!Array.isArray(s.itens))s.itens=[];if(!Array.isArray(s.h))s.h=[];if(!Array.isArray(s.grim))s.grim=[];
+ log("Ficha restaurada de um backup");drawF()}
+function addI(){const e=document.getElementById("ni"),v=e.value.trim();if(!v)return;s.itens.push(v);log("Item adicionado: "+v);drawF()}
+function delI(i){log("Item removido: "+s.itens[i]);s.itens.splice(i,1);drawF()}
+function reset(){if(confirm("Apagar a ficha inteira, inclusive o histórico?")){s=blank();save();drawF()}}
+function drawF(){
+ document.getElementById("sub").textContent=(s.nome||"Sem nome")+" · "+s.raca+" "+s.classe+" · nível "+s.nivel;
+ document.getElementById("navF").innerHTML=[["f","Ficha"],["i","Itens"],["m","Magias"],["n","Nível"],["h","Histórico"]].map(x=>`<button class="${tabF==x[0]?"on":""}" onclick="tabF='${x[0]}';drawF()">${x[1]}</button>`).join("");
+ const c=cls(),r=rac();let h="";
+ if(tabF=="f")FL.list[FL.cur]=s;
+ if(tabF=="f")h=`<label>Meus personagens<select onchange="trocar(this.value)">${Object.keys(FL.list).map(id=>`<option value="${id}"${id==FL.cur?" selected":""}>${esc(FL.list[id].nome||"Sem nome")} · ${esc(FL.list[id].classe||"")}</option>`).join("")}</select></label><div class="g"><button class="b x" onclick="novaFicha()">Nova ficha</button><button class="b x" onclick="excluirFicha()">Excluir esta ficha</button></div><div class="g">${txt("nome","Nome")}${txt("apelido","Apelido")}${sel("raca","Raça",RA.map(x=>x[0]))}${sel("classe","Classe",CL.map(x=>x.n))}</div>
+ <button class="b s" onclick="hero()">Herói aleatório</button>
+ <button class="b" onclick="fill()">Preencher pela raça e classe</button>
+ <div class="hint">${esc(r[3])}</div>
+ <h2>Atributos (somam no d20)</h2><div class="g g4">${Object.keys(A).map(k=>num(k,A[k])).join("")}</div>
+ <h2>Situação</h2><div class="g g4">${num("vida","Vida")}${num("vidaMax","Máx.")}${num("pm","PM")}${num("pmMax","Máx.")}${num("ps","Sorte")}${num("arm","Armad.")}${num("nivel","Nível")}${num("cobres","Cobres")}</div>
+ <div class="row"><button class="b s" onclick="rest(0)">Descanso curto</button><button class="b s" onclick="rest(1)">Descanso longo</button></div>
+ <h2>Anotações</h2>${txt("pericias","Perícias (+2)")}${area("talentos","Talentos")}${area("magias","Magias")}${area("notas","Notas")}
+ <h2>Backup</h2><textarea id="bkt" placeholder="O backup aparece aqui. Para restaurar, cole um backup nesta caixa e toque em Restaurar."></textarea>
+ <div class="g"><button class="b s" onclick="bkGet()">Copiar backup</button><button class="b s" onclick="bkTxt()">Copiar resumo</button></div>
+ <button class="b x" onclick="bkSet()">Restaurar da caixa</button>
+ <button class="b x" onclick="reset()">Apagar ficha</button>`;
+ if(tabF=="i")h=`<h2>Inventário</h2><div class="row"><input id="ni" placeholder="Novo item ou Tralha"><button class="b" onclick="addI()">Adicionar</button></div>
+ <ul>${s.itens.map((x,i)=>`<li><span>${esc(x)}</span><button onclick="delI(${i})" aria-label="Remover">✕</button></li>`).join("")||"<li>Nada por aqui. Adicione o primeiro item.</li>"}</ul>
+ <div class="g">${num("cobres","Cobres")}${num("arm","Armadura")}</div>`;
+ if(tabF=="n"){const have=s.talentos,op=c.ev.filter(x=>!have.includes(x.split(":")[0])),nx=s.nivel+1;
+ h=`<h2>Nível ${s.nivel} de 5</h2>`+(s.nivel>=5?`<div class="hint">Nível máximo. Boa encrenca!</div>`:
+ `<div class="hint">Subir para o nível ${nx}: +4 de Vida${s.pmMax>0?", +1 PM":""} e 1 talento${nx==3||nx==5?", mais +1 em um atributo":""}.</div>
+ <label>Talento novo<select id="tl"><option value="">(nenhum)</option>${op.map(x=>`<option>${esc(x)}</option>`).join("")}</select></label>
+ ${nx==3||nx==5?`<label>Atributo que sobe<select id="at"><option value="">(nenhum)</option>${Object.keys(A).map(k=>`<option value="${k}">${A[k]} (${s[k]})</option>`).join("")}</select></label>`:""}
+ <button class="b" onclick="up()">Subir de nível</button>`)+
+ `<h2>Talentos da classe</h2><ul>${c.ev.map(x=>`<li><span>${esc(x)}</span></li>`).join("")}</ul>`}
+ if(tabF=="m"){const G=grim(),ok=sp=>(CLL[s.classe]||"@").split(" ").some(l=>sp.c.split(" ").includes(l)),op=G.filter(x=>!s.grim.includes(x.n));
+ h=`<h2>Magias</h2><div class="g g4">${num("pm","PM")}${num("pmMax","PM máx.")}</div>
+ <div class="hint">Conjurar: d20 + ${s.classe=="Farsante"?"Lábia":"Miolo"} contra Dif. 5. Falhou? Perde só metade do PM. Magia de ataque: compare com a Defesa do alvo. Custo 3 ou 4 só a partir do nível 2.</div>
+ ${castMsg?`<div class="hint" style="border-left-color:var(--ac)"><b>${esc(castMsg)}</b></div>`:""}
+ <ul>${s.grim.map((n,i)=>{const sp=G.find(x=>x.n==n);return `<li><span><b>${esc(n)}</b>${sp&&sp.u?" (sua)":""} · ${sp?sp.pm+" PM":""}<br><span class="hh">${sp?esc(sp.e):""}</span></span><span style="display:flex;gap:4px;align-items:center"><button class="b s" style="width:auto;margin:0;padding:8px 12px;font-size:15px" onclick="cast(${i})">Conjurar</button><button onclick="forget(${i})" aria-label="Remover">✕</button></span></li>`}).join("")||"<li>Nenhuma magia aprendida ainda.</li>"}</ul>
+ <label>Aprender magia<select id="ns"><option value="">(escolha uma)</option>${op.map(x=>`<option value="${esc(x.n)}">${esc(x.n)} (${x.pm} PM${ok(x)?"":", fora da classe"})</option>`).join("")}</select></label>
+ <button class="b" onclick="learn()">Aprender</button>
+ <h2>Criar magia</h2><div class="g"><label>Nome<input id="cn"></label><label>Custo em PM<input id="cp" type="number" inputmode="numeric" min="1" max="10" value="1"></label></div>
+ <label style="margin-top:8px">Efeito<input id="ce" placeholder="Ex.: 1d6 de dano de gelo em um alvo"></label>
+ <button class="b s" onclick="mk()">Criar e aprender</button>`}
+ if(tabF=="h")h=`<h2>Histórico de alterações</h2><ul>${s.h.map(x=>`<li><span>${esc(x.t)}</span><span class="hh">${new Date(x.d).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})}</span></li>`).join("")||"<li>Nenhuma alteração ainda.</li>"}</ul>`;
+ document.getElementById("appF").innerHTML=h}
+document.addEventListener("change",e=>{const t=e.target,k=t.dataset.k;if(!k)return;let v=t.value;if(t.dataset.n)v=Math.max(0,+v||0);set(k,v);if(k=="raca"||k=="classe"||k=="nome"||k=="nivel")drawF()});
+drawF();
+
+
+const T=`Nomes e apelidos|Bruto Pé-Sujo|Zeca Dedo-Lento|Mirtes Bochecha|Orvalho o Azarado|Tonho Mão-de-Vaca|Pipa Boca-Grande|Glorb Sem-Noção|Dona Fifi Barriga-Dágua|Quim Trovão|Barnabé Cabeça-Oca|Lúcio Pavio-Curto|Nina Língua-Solta|Tuco Pé-de-Cabra|Zefa Caolho|Rolf o Esquecido|Bia Nariz-de-Batata|Gaspar Rabugento|Pimpa Baixinho|Totó Sortudo|Valquíria o Estranho
+Aparência|Cicatriz no queixo|Dentes de ouro|Cabelo de espanador|Um olho tapado|Orelhas gigantes|Muito alto para a raça|Tatuagem torta|Sorriso nervoso|Sobrancelhas enormes|Manchas de tinta e graxa|Cheiro de queijo|Roupa toda remendada|Chapéu absurdo|Voz fina demais|Unhas pintadas|Dedos sujos de pó|Brinco de osso|Cabelo colorido|Capa grande demais|Sempre molhado
+Manias|Coleciona pedrinhas|Conversa com objetos|Não sabe mentir|Tem medo de galinhas|Come sem parar|Canta quando está nervoso|Só toma banho na lua cheia|Odeia acordar cedo|Rouba colheres|Conta tudo em dobro|Jura vingança por bobagens|Dá nome às armas|Fala de si em terceira pessoa|Cheira tudo|Acredita em mau agouro|Assobia sem parar|Pede desculpas demais|Acha que é famoso|Aposta em tudo|Adora rimar
+Tralhas do bolso|Corda de 10 metros|Três tochas|Poção de cura (1d6)|Espelhinho de bolso|Giz colorido|Saco de bolas de gude|Pé de cabra|Gancho com corda|Três rações de viagem|Pergaminho em branco|Apito estridente|Pó de espirro (1 uso)|Lupa|Bomba de fumaça (1 uso)|Frasco de óleo|Rede de pesca|Chave misteriosa|Dado da sorte (1 repetição)|Galinha de borracha|Mapa rasgado com um X
+Complicações (natural 1)|Sua arma ou ferramenta quebra|Você cai de bunda|Barulho enorme: todos escutam|Você solta o item mais importante|Acerta um aliado (ou algo caro)|Você fica todo enroscado|O chão cede sob seus pés|Chega reforço inimigo|Seu estômago ronca alto|Pânico: perde o próximo turno|Algo na sua mochila quebra|Você se separa do grupo|Você se suja de lama ou gosma|O inimigo ganha vantagem|Você perde 1d4 de Vida|Você derruba a tocha|Dor nas costas: desvantagem no próximo teste|Todos olham feio para você|Seu cinto arrebenta|Rolou ruim, mas ganha 1 PS
+Pifa de magia|Sai fumaça colorida|Voz de pato por 1 hora|A magia acerta você mesmo|Chove sapos pequenos|Seu cabelo muda de cor|Um objeto vira queijo|Você flutua por 1 minuto|Espirro gigante|Aparece um pato|Você perde 1d4 de Vida|Seus pés grudam no chão|Todos riem; o alvo se anima|A magia vai para o alvo errado|Explode confete|Você troca de lugar com o alvo|Sua sombra foge de você|Você esquece a magia até descansar|Funciona, mas custa o dobro de PM|Um clarão cega todos por 1 turno|Funciona... gigante e escandalosa
+Local da aventura|Taverna “O Javali Torto”|Ponte do troll|Torre torta de mago|Pântano fedido|Feira de mercado|Cripta esquecida|Fazenda assombrada|Floresta falante|Mina abandonada|Navio encalhado|Mosteiro silencioso|Vila em plena festa|Castelo do Rei Mimado|Caverna de cristal|Estrada de carroças|Ilha flutuante|Esgoto da cidade|Circo itinerante|Biblioteca sem fim|Vulcão simpático
+Problema|Alguém roubou algo precioso|Um ritual deu errado|Um monstro bloqueia o caminho|Sequestraram alguém querido|A comida está sumindo|Uma maldição bem boba|O mapa leva ao lugar errado|Uma festa vai ser arruinada|Uma dívida vence hoje|Um ovo vai chocar a qualquer momento|Rivais querem o mesmo prêmio|Um erro de identidade|A ponte vai cair|Um objeto vivo fugiu|Barulho estranho toda noite|O rei exigiu uma tolice|Todo mundo está dormindo|A chuva não para|Um duelo marcado sem querer|Alguém precisa de carona até o fim do mundo
+Ameaça|Bando de goblins|Um mago ressentido|Cultistas desastrados|Um dragonete mimado|Capitão da guarda corrupto|Bruxa do pântano|O Rei dos Ratos|Gigante com dor de dente|Quarteto de bardos rivais|Esqueletos teimosos|Troll mal-humorado|Baú faminto|Barão ganancioso|Fantasma carente|Alquimista maluco|Cavaleiro que se acha herói|Ogro cozinheiro|Duende trapaceiro|Cogumelos hipnóticos|Seu próprio reflexo
+Reviravolta|O aliado é o culpado|O vilão tem um pouco de razão|O prêmio é falso|Chega um segundo grupo de heróis|O lugar começa a desmoronar|Dois NPCs trocaram de lugar|O monstro só queria conversar|O mapa estava de cabeça para baixo|Alguém acorda de um sono mágico|O tesouro é perigoso|Quem contratou vocês mentiu|Uma tempestade chega|Aparece um parente do vilão|O objetivo muda no meio|O herói famoso é um impostor|Existe uma passagem secreta|A maldição é contagiosa|O vilão se rende... para recrutar vocês|O barulho era um filhote de dragão|Era tudo um teste
+Encontro no caminho|Bando de ratos gigantes|Mercador trapaceiro|Viajante perdido|Gosma na estrada|Duas facções brigando|Carroceiro sem roda|Feira ambulante|Patrulha desconfiada|Bardo desafinado|Árvore que pede ajuda|Esqueleto perdido|Ponte com pedágio|Cervo mágico|Bandidos muito educados|Névoa estranha|Peregrino faminto|Pegadas enormes|Gato falante (é pior que o dono)|Mímico fingindo ser baú|Dragonete tomando sol
+Tesouro|2d6 cobres|Moedas de chocolate|Poção de cura|Gema colorida (vale 10 cobres)|Adaga com nome gravado|Mapa para outro tesouro|Chave de ouro|Elmo brilhante (+1 armadura)|Anel que esquenta|Capa que cheira a lavanda|Pergaminho de magia (role no Grimório)|Botas silenciosas (vantagem em furtividade)|Saco sem fundo (pequeno)|Espada que fala sem parar|Amuleto da sorte (+1 PS)|Ovo de dragonete|Estandarte de um reino perdido|Livro de receitas arcanas|Barril de hidromel|Coroa tosca (vale um reino)
+Quem é esse NPC?|Taverneiro fofoqueiro|Guarda entediado|Criança muito esperta|Mago só de passagem|Padeira poderosa|Mercador exagerado|Velha misteriosa|Cavaleiro enferrujado|Pescador que sabe de tudo|Nobre mimado|Ladrão arrependido|Ferreiro anão|Bardo sem plateia|Fazendeiro desesperado|Guia nervoso|Estudante de magia|Padre distraído|Capitão sem navio|Cozinheiro orc|Um rei disfarçado
+Rumores de taverna|O poço da vila anda cantando|Dizem que o rei é um sapo|Viram um dragão de chapéu|A mina tem fantasmas educados|Existe um queijo lendário|A ponte só aparece ao amanhecer|Um mago perdeu a própria torre|O moinho gira sem vento|Os ratos organizam uma greve|Tem tesouro embaixo da taverna|A estalagem vizinha é amaldiçoada|O prefeito não é humano|A lua anda mais perto|Cogumelos falam à meia-noite|Um cavaleiro procura ajudante|Os mortos mudam de lugar|Uma bruxa troca favores por meias|O pântano está crescendo|Um mapa vale 100 cobres|Tudo isso é verdade
+Salas de masmorra|Corredor com goteira|Sala cheia de ossos|Armadilha de dardos|Cofre trancado|Poço sem fundo|Biblioteca empoeirada|Altar quebrado|Cozinha esquecida|Sala de espelhos|Ponte sobre lava|Quarto do guarda dorminhoco|Jardim subterrâneo|Sala que gira|Prisão vazia (ou quase)|Sala do tesouro (suspeita)|Lago negro|Estátuas que olham|Fornalha antiga|Salão do trono|Saída secreta
+Objeto da busca|Coroa roubada|Ovo dourado|Receita secreta|Cajado quebrado|Gato de estimação|Cálice vazio|Chave sem porta|Livro proibido|Pedra falante|Espada enferrujada|Bola de cristal trincada|Pena de fênix|Amuleto da sorte|Colher de ouro|Mapa estrelado|Sino mágico|Barril especial|Aliança de casamento|Cartas de um herói|Um sapo (é importante)
+Clima|Chuva torrencial|Sol de rachar|Nevoeiro denso|Vento forte|Chuva de granizo|Tempestade com raios|Noite sem lua|Calor insuportável|Frio de congelar|Garoa chata|Céu limpo e estrelado|Chuva de sapos (relaxe)|Neblina com cheiro de torta|Tremor de terra leve|Tempestade de areia|Brisa suave (suspeita)|Eclipse|Aurora colorida|Neve em pleno verão|Clima perfeito (algo vai dar errado)
+O que o vilão quer?|Quer ser amado|Vingança por uma ofensa pequena|Quer ficar rico|Quer provar que é um gênio|Defende o próprio lar|Foi enganado por outro vilão|Quer um parente de volta|Quer a coroa|Está só entediado|Quer um pouco de silêncio|Acredita numa profecia|Quer salvar o mundo (do jeito errado)|Quer um amigo|Quer conquistar a vila|Quer ganhar um concurso|Quer destruir um objeto específico|Quer o último pedaço de torta|Foi amaldiçoado|Quer ser notado|Quer só ir para casa
+Reação do NPC|Hostil: ataca|Desconfiado|Irritado|Assustado|Indiferente|Entediado|Curioso|Dá uma pista falsa|Pede um favor primeiro|Neutro|Simpatiza com vocês|Quer vender algo|Conta uma fofoca|Quer se juntar ao grupo|Oferece comida|Retribui um favor|Se encanta por um herói|Vira fã|Revela um segredo|É um aliado fiel
+Monstro aleatório|Gosma Gulosa|Esqueleto Chato|Rato Gigante|Morcego Bêbado|Troll de Ponte|Cogumelo Maluco|Baú Mímico|Dragonete|Lobo Rabugento|Aranha Gigante|Fantasma Carente|Ogro Cozinheiro|Golem de Pedra|Bandido Educado|Gárgula Preguiçosa|Bruxa do Pântano|Bando de 3 a 5 ratos|Dois monstros de uma vez (role 2)|Um monstro com 2 truques (junte 2)|O Mestre escolhe (o pior)
+Nome de taverna|O Javali Torto|A Caneca Furada|O Dragão Bêbado|O Gato Gordo|A Bota Velha|A Colher Dourada|O Rato Feliz|O Pé de Galinha|O Grifo Cansado|A Santa Panela|A Barba Molhada|O Gnomo Distraído|O Troll Educado|A Última Gota|A Estalagem do Sono|A Lua Mal-Humorada|O Elmo Amassado|A Coruja Falante|O Pergaminho Molhado|O Cogumelo Roxo
+Armadilhas (Dif. 5, 1d6)|Dardos saem de uma parede|Piso que afunda|Rede cai do teto|Lâmina que balança|Porta que se tranca sozinha|Fosso com espetos de borracha|Gás de gargalhada|Pedra rolante|Corda que ergue o herói|Fio ligado a um sino de alarme|Chão escorregadio de óleo|Estátua que cospe fogo|Baú que explode confete|Teia gigante|Sala que enche de água|Espelho que prende reflexos|Dardos de sono|Alçapão para o esgoto|Tapete que joga para fora|Nenhuma: foi só um susto
+Itens mágicos esquisitos|Chapéu que sussurra conselhos|Botas que andam sozinhas|Colher que nunca esvazia|Anel de invisibilidade (só o dedo)|Cajado que vira pato|Capa de fumaça perfumada|Espada que brilha diante de mentiras|Escudo que reclama de tudo|Mapa que se redesenha|Lanterna que mostra o passado|Chave que abre tudo (menos às terças)|Dado que dá sorte aos outros|Corda que obedece ordens|Espelho de bolso que elogia|Pena que só escreve a verdade|Apito que chama um cão fantasma|Cantil de água sempre gelada|Luvas de escalada|Amuleto que atrai pombos|Coroa que dá ordens a quem a usa
+Poções misteriosas|Cura 1d6 de Vida|Cura 2d6 de Vida|Pele azul por 1 hora|Voz de gigante por 1 hora|Vantagem em Músculo (1 cena)|Flutua por 1 minuto|Vira sapo por 10 minutos|Fala com bichos por 1 hora|Cheiro de rosas por um dia|Invisível por 1 minuto|Dorme por 1d4 turnos|Cabelo cresce 1 metro|Vantagem em Reflexo (1 cena)|Recupera 2 PM|Enxerga no escuro (1 hora)|Sopra fogo (1d6) uma vez|Soluços por 1 hora|Só água (sem gosto)|Esquece o próprio nome|Tudo de uma vez (role 3 vezes)
+Maldições bobas|Só consegue falar rimando|Fala sempre cantando|Orelhas de burro|Cheira a peixe velho|Pés tortos: desvantagem ao correr|Espirra toda vez que mente|Odeia quem usa chapéu|A sombra tem vida própria|Troca de voz com um aliado|Brilha no escuro (péssimo para furtividade)|Tudo que toca gruda|Só consegue comer pão|Dorme sempre em pé|Ouve música aonde vai|Não consegue dizer “não”|A pele muda de cor com o humor|Atrai gatos|Esquece o nome de todo mundo|Os passos fazem barulho de pato|Quebra-se ao rir de si mesmo
+Quadro de missões|Procura-se gato desaparecido|Escoltar uma carroça de queijo|Livrar o porão dos ratos|Entregar uma carta ao dragão|Achar a cabra do prefeito|Vigiar um casamento|Descobrir quem roubou os pães|Limpar um fantasma (educadamente)|Colher ervas no pântano|Proteger uma carroça de feno|Consertar a ponte|Vencer o campeão da vila|Achar o noivo fugitivo|Espantar o gigante da colheita|Descobrir de onde vem o barulho|Entregar um bolo sem balançar|Resgatar um bardo preso|Caçar o monstro do lago|Levar um ovo até o ninho|Missão secreta (a cliente é a rainha)
+Barulhos no escuro|Goteira em ritmo estranho|Risada abafada|Passos arrastados|Asas batendo|Um espirro|Um ronco enorme|Música distante|Ossos estalando|Metal sendo arrastado|Cochichos|Um grito cortado ao meio|Algo roendo madeira|Água borbulhando|Um sino fraquinho|Alguém chorando baixinho|Barulho de panela|Um miado|Estalo de madeira|Silêncio total (pior)|Aplausos
+Pratos da taverna|Ensopado misterioso|Torta de cogumelo roxo|Pão duro com queijo|Linguiça de javali|Sopa de cebola (e lágrimas)|Peixe frito cheio de espinhas|Salada de folhas suspeitas|Bolo de mel|Costela de bode assada|Cerveja morna|Hidromel com glitter|Ovos de origem duvidosa|Caldo de sapo|Frango assado|Purê cheio de grumos|Queijo que se mexe|Pão recheado de surpresas|Suco de abóbora|Panqueca de maçã|O prato do dia (ninguém sabe)
+Nomes de vilas|Pé-de-Ganso|Vale Torto|Alto da Lama|Cabeça de Pedra|Poço Fundo|Santa Pulga|Rio Preguiça|Moinho Bêbado|Pedra Mole|Queijo Alto|Cova do Tatu|Três Porcos|Dente-de-Leão|Fim do Mundo (o outro)|Vila Nova Velha|Cabo da Sorte|Brejo Alegre|Ponte Quebrada|Cinza Fria|Lugar Nenhum
+No acampamento, à noite|Uma raposa rouba a comida|Passa um viajante|Chuva de estrelas cadentes|Pesadelo coletivo|Chuva repentina|Barulho estranho no mato|Um fantasma pede abrigo|Alguém sonha andando|Aparece um gato|A fogueira muda de cor|Um bardo pede para dormir|Um ladrão tenta roubar|Neblina com música|Um monstrinho perdido|Noite tranquila (+1 PM a todos)|Uma coruja entrega uma carta|Um sapo falante aparece|Cheiro de comida vem de longe|Um ronco acorda todos|Visita misteriosa (role um NPC)
+Armas especiais|Espada Falante (comenta tudo)|Machado do Lenhador (+1 contra plantas)|Adaga Silenciosa (+1 ao surpreender)|Arco do Vento (alcance dobrado)|Martelo Trovejante (barulho: 1d4 em 3 m)|Lança Elástica (alcança 6 m)|Cajado Cintilante (ilumina)|Maça Pegajosa (alvo preso)|Espada Quente (+1 dano de fogo)|Espada Fria (+1 dano de gelo)|Besta Rápida (sem recarga)|Chicote Elétrico (2 alvos)|Faca de Cozinha Lendária|Bastão Mola (empurra 3 m)|Machado Gêmeo (2 ataques)|Arco Coruja (acerta no escuro)|Rapieira Elegante (+1 em Reflexo)|Marreta Mole (não mata, nocauteia)|Foice do Colheita (+1 contra mortos)|Espada de Cartão (parece forte)
+Armaduras especiais|Couro Perfumado|Malha de Anéis Brilhantes|Placas de Cobre Falso|Casaco Almofadado (+1, quentinho)|Escudo de Panela (+1, barulhento)|Elmo de Chifres (+1, intimida)|Armadura de Escamas (+2)|Cota de Ossos (+1)|Capa Refletora (+1 contra magia)|Peitoral de Madeira (+2, pesada)|Escudo Espelhado (reflete luz)|Armadura Enferrujada (+1, ranger)|Colete de Moedas (+1, tilinta)|Gibão Pegajoso (+1, gruda)|Elmo-Balde (+1, cabe)|Armadura de Palha (+1, inflamável)|Escudo Gigante (+2, 2 mãos)|Manto de Folhas (+1, camuflagem)|Armadura Dourada (+2, chama atenção)|Couraça de Tartaruga (+2, lenta)
+Engenhocas e ferramentas|Apito Chama-Ratos|Mola de Salto (3 m)|Lanterna Giratória|Balão Portátil (flutua 1 min)|Caixinha de Fogos|Gancho Mecânico (6 m)|Mão Mecânica (pega à distância)|Cogumelo de Alarme|Pá Dobrável|Bússola Doida|Pés de Mola|Rede Disparável|Óculos de Visão Noturna|Sino Anti-Monstro (assusta ratos)|Cantil Térmico|Escova de Dentes de Dragão|Detector de Metais (apita)|Lupa Gigante|Guarda-Chuva-Escudo (+1)|Caixa de Música Hipnótica
+Ervas e comidas|Folha-de-Prata: cura 1d4|Cogumelo-Riso: gargalhada (1 min)|Raiz-Azeda: antídoto simples|Flor-Sono: dorme 1 hora|Fruta-Dourada: +1 Vida máxima (1 dia)|Mel-Mágico: cura 1d6|Pimenta-Dragão: sopra fogo 1d4|Musgo-Quente: aquece 1 hora|Casca-Doce: vantagem Lábia|Erva-Pesada: -1 Reflexo (1 hora)|Fungo-Brilhante: ilumina|Folha-Anti-Fogo: resiste a fogo|Fruta-Fedida: afasta bichos|Raiz-Forte: vantagem Músculo|Chá-Lento: calma e desvantagem|Cipó-Resistente: vira corda|Bolota-Salto: pula 6 m|Bulbo-Brilho: cega por 1 turno|Semente-Árvore: planta árvore em 1 min|Torta Suspeita: role de novo
+Pergaminhos estranhos|Faísca (Grimório)|Luz (Grimório)|Cura Leve (Grimório)|Sono (Grimório)|Ilusão (Grimório)|Bênção (Grimório)|Consertar (Grimório)|Escudo Brilhante (Grimório)|Teia (alvo preso)|Fumaça (cobre 6 m)|Bola de Fogo (Grimório)|Passo Relâmpago (Grimório)|Invisibilidade (Grimório)|Voo Meia-Boca (Grimório)|Raio Trovejante (Grimório)|Pergaminho em branco (que pena)|Receita de bolo (útil)|Contrato assinado (por você!)|Mapa estrelado|Desejo Atrapalhado (Grimório)
+Joias e anéis|Anel de Cobre (inútil, bonito)|Anel da Sorte: +1 PS|Brinco de Osso: vantagem Intimidar|Colar de Contas: vantagem Lábia|Anel Quente (sempre aquece)|Broche de Gato: cai de pé|Pulseira de Prata: +1 contra maldição|Anel de Esmeralda: vale 40 cobres|Medalhão Vazio (cabe um segredo)|Colar de Dentes: +1 Intimidar|Anel da Fome (come tudo)|Tiara de Latão: +1 Miolo para magia|Anel de Sinete: abre portas de nobres|Relicário com um bilhete|Anel que muda de cor|Colar de Pérolas: vale 60 cobres|Brincos de Sino (tilintam)|Anel de Cogumelo: vantagem esporos|Broche da Coruja: vê no escuro|Coroa de Latão (rei por 1 dia)
+Condições (status)|Atordoado: perde a próxima ação|Caído: gasta o movimento para levantar|Cego: desvantagem em tudo|Surdo: não ouve avisos|Envenenado: 1d4 por turno|Queimando: 1d6 por turno|Congelado: não se move 1 turno|Preso: Músculo Dif. 7 para soltar|Assustado: foge por 1 turno|Confuso: ataca aleatório|Dormindo: acorda ao sofrer dano|Lento: só 1 ação por rodada|Rápido: +1 ação na rodada|Invisível: vantagem ao atacar|Enfeitiçado: obedece 1 ordem simples|Sangrando: 1 de dano por turno|Exausto: desvantagem em Músculo|Abençoado: +1 em todos os testes|Amaldiçoado: -1 em todos os testes|Inspirado: ganha 1 PS
+Efeitos de elemento|Fogo: queima 1d6 por turno|Fogo: acende objetos próximos|Gelo: congela uma poça|Gelo: lentidão por 1 turno|Raio: salta para 1 alvo extra|Raio: desliga engenhocas|Veneno: 1d4 por 2 turnos|Ácido: corrói arma (-1 dano)|Vento: empurra 3 m|Vento: apaga tochas|Terra: cria cobertura (+1)|Terra: o chão treme|Água: inunda a sala (3 m)|Água: apaga fogo e raios|Luz: cega por 1 turno|Trevas: apaga a luz de 6 m|Som: surdez por 1 turno|Gosma: escorrega|Cogumelo: esporos (desvantagem)|Magia Selvagem: role de novo duas vezes
+Mutações estranhas|Terceiro olho na testa|Pele de cor trocada|Braços extras (inúteis)|Cauda de lagartixa|Orelhas de coelho|Voz de trovão|Dedos de ventosa|Barbatanas nos pés|Cabelo de fogo (frio)|Língua bifurcada|Pelo azul por todo o corpo|Pés de pato|Nariz de elefante|Pele de pedra (+1)|Asas pequenas (decorativas)|Dentes de tubarão|Mãos gigantes|Pele transparente|Cabeça girando completamente|Cresce 30 cm (ou diminui)
+Bênçãos de viagem|+1 em Músculo por 1 dia|+1 em Reflexo por 1 dia|+1 em Miolo por 1 dia|+1 em Lábia por 1 dia|Vantagem no 1º teste da cena|Cura 1d6 ao descansar|+1 PS|+2 PM|Passos silenciosos por 1 dia|Visão no escuro por 1 dia|Falar com bichos por 1 hora|Resiste a fogo por 1 dia|Salta o dobro por 1 dia|Ignora a próxima falha|Vantagem em Intimidar por 1 dia|+2 de Vida máxima por 1 dia|Vantagem contra medo|Sorte: 1 repetição de dado|Aura calma (aliados +1)|Bênção maior: role 2 vezes
+Encantamentos de arma|Chamas: +1 de dano de fogo|Gelo: +1 de dano de gelo|Raio: +1 de dano elétrico|Veneno: 1d4 por turno|Afiada: +1 de dano|Rápida: ataca 2 vezes (1 por cena)|Vampírica: cura 1 ao ferir|Brilhante: ilumina e assusta mortos|Silenciosa: vantagem ao atacar escondido|Pesada: derruba o alvo|Atada: não pode ser desarmada|Retorna: volta ao arremessar|Sortuda: repete 1 dado por dia|Zombeteira: debocha do alvo (desvantagem)|Colorida: muda de cor com o humor|Cantante: afasta ratos|Eco: causa o dano 2 vezes (1 por cena)|Tempestade: chove ao atacar|Real: vantagem em Lábia|Dupla: role 2 encantamentos
+Surto de magia|A magia dobra de tamanho|A magia dura o dobro|A magia ataca um aliado|A magia cria patinhos|A magia faz cócegas|A magia vira confete|A magia muda de elemento|A magia custa 0 PM|O alvo vira um sapo por 1 min|O conjurador levita 1 min|Você perde a voz por 1 hora|A magia acerta todos em 3 m|Magia vai na direção oposta|Surge um pequeno portal (1 turno)|Todos esquecem o último turno|Uma chuva de pétalas cobre a sala|A magia é cantada por um coro|O conjurador troca de lugar com o alvo|Você ganha 1d4 PM (surto positivo)|Role duas vezes e combine
+Nomes de reinos|Reino do Pão Mole|Ducado do Vale Torto|Condado das Três Pontes|Reino de Cristal Fosco|Império da Colher Dourada|Marca do Brejo Alegre|Principado do Gato Gordo|Reino das Torres Tortas|República dos Moinhos|Ducado de Pedra Mole|Reino da Névoa Roxa|Condado do Queijo Alto|Império do Sol Fraco|Reino do Grifo Cansado|Marquesado do Fim do Mundo|Reino dos Sinos|Ducado da Lua Mal-Humorada|Reino de Cinza Fria|Terras Livres de Lugar Nenhum|Reino do Rei Mimado
+Nomes de armas lendárias|Roedora|Cutuca-Dragão|Mãe-da-Briga|Cortinha|Vento-Frio|Pé-de-Ferro|Grita-Alto|Quebra-Nuvem|Dona Fatia|Estrela-Torta|A Educada|Sopa-de-Aço|Trovão-Manso|Dente-de-Lua|Ferrão do Sul|Pesadelo-de-Mesa|O Esquecido|Cintilante|Garfo-Real|A Última Palavra
+Profissões de NPC|Padeiro|Ferreiro|Pescador|Cozinheiro|Estalajadeiro|Ladrão|Guarda|Mensageiro|Costureira|Sapateiro|Boticário|Bardo|Lenhador|Fazendeiro|Cartógrafo|Coveiro|Mago de feira|Barbeiro|Leiteiro|Arauto
+Festivais|Festa da Colheita de Queijos|Dia do Grande Banho|Corrida dos Porcos|Festival das Lanternas|Noite do Pão Quente|Torneio de Torta na Cara|Procissão dos Sinos|Dia da Troca de Chapéus|Concurso de Barbas|Festa do Espantalho|Desfile das Carroças|Noite dos Contadores de Mentira|Feira de Bichos Estranhos|Dia do Silêncio (proibido falar)|Banquete do Rei|Festival do Vento|Noite das Estrelas Cadentes|Cerimônia do Troll na Ponte|Dia de Pedir Desculpas|Festa de Aniversário do Prefeito
+Segredos do NPC|É um nobre disfarçado|Deve dinheiro ao vilão|Sabe de uma passagem secreta|É espião de um reino rival|Esconde um dragonete de estimação|Já foi um herói famoso|Está amaldiçoado e não sabe|Guarda o mapa de um tesouro|É parente do vilão|Roubou uma Relíquia|Não é humano (disfarce)|Fala com os mortos|Foge de um casamento|É o dono da taverna (de verdade)|Tem um irmão gêmeo mau|Sabe a fraqueza do chefe|Odeia a cidade em que mora|Tem um poder mágico secreto|Quer virar aventureiro|Contou tudo isso a todo mundo
+Títulos de herói|o Destemido|a Sortuda|o Quebra-Portas|a Dama do Pântano|o Chefe de Cozinha|a Faca Veloz|o Rei das Colheres|a Dona das Pontes|o Teimoso|a Voz de Trovão|o Esquecido|a Pequena Grande|o Dedo-de-Ouro|a Pé-de-Vento|o Amigo dos Ratos|a Cantora de Guerra|o Pesado|a Sem-Medo|o Barbudo Famoso|a Última da Linhagem
+Armas leves (corpo a corpo)|Adaga (d4)|Faca de cozinha (d4)|Estilete (d4, +1 ao surpreender)|Punhal curvo (d4)|Soco-inglês (d4)|Cajado curto (d4)|Machadinha (d6)|Rapieira (d6, ágil)|Espada curta (d6, ágil)|Sabre (d6)|Clava pequena (d6)|Foice de mão (d6)|Maça leve (d6)|Chicote (d4, alcance 3 m)|Garra de ferro (d4, 2 ataques)|Kama (d6)|Florete (d6, ágil)|Tonfa (d4, +1 para se defender)|Cutelo (d6)|Pé de cabra (d4, arromba)
+Armas pesadas (corpo a corpo)|Espada longa (d8)|Machado de batalha (d8)|Martelo de guerra (d8)|Maça de ferro (d8)|Espadão (d10, 2 mãos)|Machado grande (d10, 2 mãos)|Alabarda (d10, 2 mãos, alcance 3 m)|Marreta (d10, 2 mãos)|Espada gigante (d12, 2 mãos)|Lança de cavaleiro (d8, +carga)|Clava com espinhos (d8)|Mangual (d8, ignora escudo)|Foice de guerra (d10, 2 mãos)|Picareta de guerra (d8)|Martelo de ferreiro (d10)|Cimitarra (d8)|Glaive (d10, 2 mãos)|Maça-estrela (d8)|Machado de duas lâminas (d10)|Tronco de árvore (d12, 2 mãos)
+Armas de curto alcance|Adaga de arremesso (d4)|Machadinha de arremesso (d6)|Lança curta (d6)|Dardos (d4, 3 por turno)|Funda (d4)|Bumerangue (d4, volta)|Facas de arremesso (d4, 3 por turno)|Boleadeiras (d4, prende)|Rede (prende o alvo)|Pistola (d6, 1 tiro)|Pistola dupla (d6, 2 tiros)|Besta de mão (d6)|Zarabatana (d4, veneno)|Chakram (d6, volta)|Estrelas de ferro (d4, 3 tiros)|Garrafa explosiva (d6, 1 m)|Pedra afiada (d4)|Bola de ferro (d6)|Arpão curto (d6, puxa o alvo)|Tocha acesa (d4, fogo)
+Armas de longo alcance|Arco curto (d6)|Arco longo (d8)|Besta leve (d6)|Besta pesada (d10, recarga 2 turnos)|Arco composto (d8)|Mosquete (d10, recarga 1 turno)|Arcabuz (d8, barulhento)|Rifle de pólvora (d10)|Catapulta de bolso (d8)|Arco de caça (d6, silencioso)|Besta de repetição (d6, 3 tiros)|Funda grande (d6)|Arco élfico (d8, +1 para acertar)|Lança-arpão (d8, prende)|Canhão de mão (d12, recarga 2)|Arco de osso (d6)|Besta anã (d8)|Lança-dardos (d8)|Trabuco (d8, atinge 3 m)|Arco gigante (d10, 2 mãos)
+Armas mágicas|Espada Chama: +1d4 de dano de fogo|Adaga Sombra: invisível ao ser sacada|Cajado Raio: 1d6 elétrico (1 por cena)|Arco Vento: nunca erra a 10 m|Machado Gelado: +1d4 de gelo e lentidão|Martelo Trovão: estrondo (1d4 em 3 m)|Lança Fênix: volta à mão|Espada Dançante: ataca sozinha (1 por cena)|Maça Santa: +1d6 contra mortos-vivos|Cajado de Pau-Brasil: +1 PM|Besta Rúnica: quase sem recarga|Foice Lunar: +1 à noite|Chicote Cobra: prende o alvo|Adaga Vampira: cura 1 ao ferir|Espada Falante: dá conselhos (às vezes úteis)|Machado Gêmeo: 2 ataques (1 por cena)|Arco Estelar: flechas brilham no escuro|Martelo Pluma: leve como pena|Cajado Cintilante: ilumina e atordoa|Espada Relâmpago: +1d6, mas puxa raios
+Instrumentos musicais|Alaúde: Inspiração +1 uso por cena|Flauta: acalma bichos|Tambor: aliados +1 no ataque (1 cena)|Violino: vantagem em Atuar|Gaita: desorienta (Miolo Dif. 6)|Trombeta: assusta monstros fracos|Harpa: cura 1d4 em quem ouvir (1 min)|Pandeiro: aliados +1 em Reflexo|Ocarina: chama bichos pequenos|Lira: faz dormir (Dif. 7)|Sino de mão: alerta o grupo|Acordeão: barulho (alvo atordoa)|Berimbau: golpe musical d4|Violão: cantiga +1 em Lábia|Apito de osso: chama cão fantasma|Sanfona: aliados dançam (movimento ×2)|Gongo: estrondo em 6 m|Castanholas: ritmo para esgueirar|Teremim: música assustadora|Cítara: ilusão sonora (3 m)
+Grimório de magias|Faísca (A, 1 PM): fagulha à distância, 1d6 de dano (Miolo vs Defesa)|Escudo Brilhante (A D, 1 PM): um alvo ganha +2 para se defender até o fim da cena|Gosma Grudenta (A, 2 PM): alvo preso, desvantagem em Reflexo (Músculo Dif. 5 solta)|Luz (A D R F, 1 PM): luz flutuante por 1 hora|Cura Leve (D R, 2 PM): ao toque, cura 1d6 + nível de Vida|Raio Trovejante (A, 3 PM): 2d6 em linha reta (Miolo vs Defesa de cada alvo)|Bola de Fogo (A, 3 PM): 2d6 num raio de 3 m (Reflexo Dif. 5 para metade)|Invisibilidade (A F, 2 PM): alvo some até atacar ou até o fim da cena|Voo Meia-Boca (A, 2 PM): voa 1 minuto, só em linha reta|Falar com Bichos (D R F, 1 PM): conversa com animais por 10 min|Cativar (F, 2 PM): alvo gosta de você por 10 min, depois lembra de tudo|Ilusão (A F, 1 PM): imagem ou som falso (até 3 m)|Bênção (D, 1 PM): um aliado ganha vantagem em 1 teste|Punição Sagrada (D, 2 PM): 1d8 de dano (2d6 contra mortos-vivos)|Vinhas Prendedoras (D R, 2 PM): plantas seguram um alvo (Músculo Dif. 7)|Passo Relâmpago (A, 2 PM): teleporta até 6 m, para onde enxergar|Sono (A F, 2 PM): até 2 alvos com 6 ou menos de Vida dormem|Tempestade (D R, 3 PM): chuva e raios: 1d6 por turno em um alvo|Consertar (A D, 1 PM): conserta um objeto quebrado (nada vivo)|Desejo Atrapalhado (A, 4 PM): peça algo pequeno; o Mestre atende do jeito mais torto
+Masmorra: tipo de sala|Sala vazia (só poeira e ecos)|Sala vazia com 1 Tralha escondida|Combate comum|Combate: bando de monstros fracos|Combate: um monstrão solitário|Combate: emboscada (eles agem primeiro)|Guardião: lute ou resolva o enigma|Armadilha|Armadilha com tesouro de isca|Enigma|Enigma de recompensa dupla|Situação estranha|Situação perigosa|Sala do Tesouro|Fogueira (Sala Segura)|Mercador Misterioso|Santuário (altar)|Combate de Elite|Falsa Sala Segura (é um Mímico!)|Atalho: a escada está aqui!
+Masmorra: recompensa de sala|1d6 cobres × camada|2d6 cobres × camada|Poção de cura|Poção misteriosa|Uma Tralha|Pergaminho de magia (Grimório)|Arma melhor: +1 de dano (1 herói)|Armadura melhor: +1 (1 herói)|Gema (vale 20 cobres × camada)|Item mágico esquisito|+1 Ponto de Sorte para o grupo|Cura total de 1 herói|Uma Relíquia (escolha 1 de 3)|Mapa: revela o tipo de 2 salas|Refeição: todos curam 1d6 de Vida|Bolsa gorda: 3d6 cobres × camada|+2 PM para um conjurador|Pergaminho de Atalho (pula 1 sala)|Ovo de dragonete (vale 50 cobres)|Tesouro duplo: role 2 vezes
+Masmorra: situações|Alavanca suspeita no meio da sala|Estátua pede um presente|Poço de desejos (jogue 1 cobre)|Aventureiro caído com um bilhete|Porta falante que faz perguntas|Fonte de água azul brilhante|Espelho que mostra outra versão do grupo|A sala começa a inclinar|Um prisioneiro pede ajuda|Mesa posta com comida (suspeita)|Livro num pedestal (maldito?)|Ponte sobre abismo com pedágio fantasma|Sala escura: sem tocha, desvantagem|Teia por toda parte|Dois caminhos: um fácil, um perigoso|Esqueleto desafia para um jogo de dados|Um gato preto cruza o caminho|Chove dentro da sala|Uma voz oferece um trato|Eco: algo repete tudo o que falam
+Masmorra: armadilhas (1d6 × camada)|O chão desaparece|Lâminas giratórias|Lança no peito|Parede que avança|Névoa de veneno|Raio de gelo|Chuva de pedras|Piso elétrico|Pêndulo gigante|Rede de ferro|Esporos de confusão|Corredor enche de areia|Escada vira rampa|Fumaça que chama monstros|Cabeça de dragão cospe fogo|Teleporte para outra sala|Garras caem do teto|Cola gigante|Sino acorda a masmorra (+1 combate)|Estava desarmada... ou não
+Masmorra: modificador de elite|Gigante: +50% de Vida|Veloz: age 2 vezes por rodada|Blindado: +2 de Defesa|Venenoso: ferida dá desvantagem|Chefão do bando: chama 2 capangas|Vampiro: cura o dano que causa|Explosivo: ao morrer, 1d6 em volta|Fantasmagórico: metade do dano físico|Regenerador: +1d4 de Vida por turno|Furioso: dano sobe 1 degrau|Escorregadio: +1 de Defesa|Mágico: ataca à distância|Sombrio: invisível no escuro|Duplo: ao ser ferido, divide-se em 2|Faminto: rouba comida e cobres|Berrador: chama +1 monstro|Espelhado: devolve 1 de dano|Pesadão: não pode ser empurrado nem preso|Cheio de tralhas: tesouro dobrado|Dourado: solta 2 Relíquias ao morrer
+Masmorra: santuário e altar|Cura total de todos os heróis|Revive 1 herói caído (1d6 de Vida)|+1 Ponto de Sorte para todos|Bênção: +1 em todos os testes (1 andar)|Troque 1 Relíquia por 2 sorteadas|Troque 10 cobres por uma poção|Rezar: d6 (1-2 maldição, 3-6 bênção)|Remove uma Maldição Boba|+2 PM para todos os conjuradores|Vantagem contra o próximo chefe|Altar vazio (mas é bonito)|Visão: revela o tipo de 2 salas|Sangue por poder: -3 Vida, +1 dano (1 andar)|Reforja uma arma: +1 de dano (1 andar)|Ofereça 1 Tralha e ganhe 20 cobres|+1 degrau em um atributo (1 herói)|Voz revela o ponto fraco do chefe|Uma coruja guia: ignore a próxima armadilha|Descanso longo completo|O altar testa: Miolo, ganha 1 Relíquia
+Masmorra: Relíquias|Moeda da Sorte: 1 vez por andar, repita um dado sem gastar PS|Botas de Mola: vantagem para fugir e saltar|Elmo Teimoso: +1 para se defender|Faca Afiada: +1 de dano com armas d4 e d6|Capa Esfarrapada: vantagem em Esgueirar-se|Anel de Vida: +4 de Vida máxima|Cristal de Magia: +2 PM máximos|Lupa do Curioso: vantagem em Miolo para achar armadilhas e segredos|Tocha Eterna: nunca apaga; ignora desvantagem no escuro|Amuleto do Sapo: vantagem em Lábia com monstros que falam|Luvas de Ferro: +1 de dano corpo a corpo|Odre Sem Fundo: 1 vez por andar, cura 1d6 de Vida em você ou num aliado|Mapa do Rato: ao entrar num andar, revele o tipo de 2 salas|Dado Viciado: 1 vez por andar, transforme um 1 natural em 3|Chave Mestra: abre qualquer porta ou baú trancado, sem teste|Pena de Fênix: 1 vez por descida, volta com metade da Vida ao cair a 0|Colar de Dentes: ataques à distância causam +1 de dano|Escudo Falante: 1 vez por andar, anule um ataque contra um aliado|Bolsa Gorda: dobra os cobres encontrados por você|Relógio Quebrado: 1 vez por andar, o grupo refaz a última ação de um herói
+Masmorra: mercador misterioso|Poção de cura (5 cobres)|Poção grande, 2d6 (12)|Pergaminho de magia (15)|Armadura leve +1 (10)|Escudo +1 (8)|Arma d8 (12)|Arma d10 (20)|Tralha aleatória (3)|Corda e gancho (4)|Bomba de fumaça (6)|Amuleto: +1 PS (25)|Relíquia, escolha 1 de 3 (40)|Mapa: revela 3 salas (15)|Gato da sorte: +1 PS (30)|Pó de espirro ×3 (6)|Ovo de dragonete (50)|Reviver herói caído (30)|Dica: tipo da próxima sala (5)|Sopa quente: todos +1d6 Vida (6)|Item proibido (o Mestre decide)
+Masmorra: ambiente da sala|Pedra úmida e musgo|Cheiro de enxofre|Colunas quebradas|Teto muito alto|Tochas azuis|Chão de tabuleiro de xadrez|Cortinas empoeiradas|Cheiro de pão (suspeito)|Estátuas de heróis antigos|Água até o tornozelo|Mofo que brilha|Ossos bem arrumados|Música ao longe|Chão de areia fina|Ecos que demoram a voltar|Cristais brilhantes|Raízes pelo teto|Pinturas de gatos|Frio de congelar|Tudo está de cabeça para baixo
+Masmorra: no corredor|Livre e silencioso|Teias de aranha|Goteira constante|Pegadas recentes|Ratos correndo|Uma moeda no chão|Um gemido distante|Vento frio|Porta secreta (Miolo Dif. 7)|Esqueleto que cumprimenta|Cheiro de fumaça|Chão falso (armadilha)|Corredor muito longo|Bifurcação enganosa|Passos: monstro errante|Rabisco na parede: “Volte”|Luz no fim do túnel|Fungos brilhantes|Um armário solitário|Atalho: pule 1 sala
+Masmorra: na fogueira|Descanso longo completo|Descanso curto e sopa quente|Bardo errante: +1 PS ao grupo|Aventureiro vende uma Tralha|Um gato dorme com o grupo (+1 Vida)|Fogueira mágica: +2 PM a todos|Viajante conta o que há no andar|Um fantasma pede um favor|Troca de poção por 5 cobres|Só um descanso curto|Pesadelo: desvantagem no 1º teste|Um rato oferece um trato|Mapa velho na parede|Um conjurador aprende uma magia|Cantiga: todos curam 1d6|Um monstro tímido pede abrigo|Baú perdido (role Recompensa)|Troquem Tralhas à vontade|A fogueira atrai um monstro errante|Tudo calmo: Vida e PM no máximo
+Masmorra: Relíquias II|Anel do Eco: 1 vez por andar, repita uma magia sem gastar PM|Cinto de Ferro: +2 de Vida máxima e vantagem para agarrar|Capa de Cometa: 1 vez por andar, mova-se 12 m e ataque na mesma ação|Amuleto do Gato: ignora dano de queda; 1 vez por descida, vantagem em Reflexo|Cálice Vazio: a cada descanso curto, cura 1d4 de Vida de todos|Bússola Doida: ao entrar num andar, aponta a direção da escada|Dente de Dragonete: seus ataques causam +1 de dano de fogo|Pedra de Amolar: 1 vez por andar, +1d4 de dano num ataque|Livro de Rabiscos: aprende 1 magia do Grimório (de qualquer classe)|Botas do Eco: anda sem fazer barulho; vantagem em Esgueirar-se|Escudo de Madeira Velha: +1 para se defender; 1 vez por andar, bloqueia 1d6 de dano|Tinta Mágica: 1 vez por andar, desenhe uma porta numa parede|Rosa dos Ventos: evita 1 Ronda de Perigo por andar|Garrafa de Vento: 1 vez por andar, sopre inimigos 3 m para longe|Colar de Pérolas: 1 vez por descida, troque por 100 cobres|Coração de Pedra: ao cair a 0, fica de pé por 1 turno com 1 Vida (1 vez por descida)|Chapéu de Mago Velho: +1 PM máximo e +1 para conjurar|Tomo do Mestre: 1 vez por andar, o Mestre revela a fraqueza de um monstro|Pata de Coelho: ganha 1 PS ao entrar em cada andar par (máximo 3)|Coroa de Papel: vantagem em Lábia com NPCs e chefes que falam
+Masmorra: mercador II|Poção de força: vantagem Músculo (10)|Escudo de aço +2 (20)|Armadura média +2 (22)|Armadura pesada +3 (40)|Arma d12 (30)|Grimório: aprende 1 magia (25)|Bomba de fogo, 2d6 (15)|Amuleto: +4 de Vida (35)|Anel: +1 para conjurar (30)|Cantil sempre cheio (6)|Tenda: descanso curto seguro (18)|Lamparina (3)|Pé de cabra: +1 para arrombar (4)|Capa de invisibilidade, 1 min (25)|Máscara de bandido (5)|Kit de cura: 1d6 × 3 usos (18)|Ovo de pássaro-trovão, 2d6 (30)|Rede de caça (5)|Ração de campanha × 5 (5)|Caixa Misteriosa do Mercador (10)
+Masmorra: situações II|Duas portas idênticas e um bilhete|Um baú que ri baixinho|Escada que só desce|Uma lagoa subterrânea com peixes falantes|Sala toda coberta de espelhos|Um relógio gigante que anda para trás|Um jogo de adivinhação com um fantasma|Estátua de herói com a sua cara|Um cavalo-fantasma pede carona|Pedras que cantam sob os pés|Fumaça colorida que muda a voz|Uma mesa de banquete vazia (mas quente)|O chão é de tabuleiro: movimento restrito|Um coro de rãs impede de falar|Sala sem gravidade|Um aventureiro pede um duelo amistoso|Uma porta cheia de olhos|Neve caindo dentro da sala|Cartas de baralho voam pelo ar|A sala é a barriga de algo enorme
+Masmorra: modificador de elite II|Mimético: copia o ataque do último herói|Dobrado: age 2 vezes, mas com Vida pela metade|Cabeçudo: +3 de Vida e -1 de Defesa|Enfeitiçado: usa uma magia do Grimório|Coroado: chama bando inteiro|Acorrentado: não se move, mas ataca em 6 m|Coberto de espinhos: devolve 1d4 ao ser tocado|Tóxico: aura de 1 de dano por turno|Sombrio: só pode ser ferido por luz ou fogo|Barulhento: chama reforço a cada 3 rodadas|Apressado: sempre age primeiro|Resistente: ignora o 1º ataque de cada herói|Brilhante: cega quem o encara (desvantagem)|Faminto: come itens e cobres, ganha Vida|Quebradiço: dano dobrado, mas 1 Vida só|Ardiloso: foge e volta com emboscada|Mascarado: parece outro monstro até ser ferido|Gelado: quem o toca fica lento|Colosso: ataca 2 alvos de uma vez|Lendário: solta uma Relíquia ao cair
+Masmorra: armadilhas II (1d6 × camada)|Dardos de fogo saem do chão|Caixa de música que atrai monstros|Rede com sinos|Placa que cai do teto|Garrafa que libera gás de sono|Escada deslizante|Lâmina escondida no corrimão|Cobra disfarçada de corda|Estátua que dispara ímãs|Piso que gira|Neblina que apaga as tochas|Fita colante gigante|Espelho que dispara luz cegante|Tapete que vira alçapão|Livro que morde|Pedra que parece tesouro e solta gás|Viga que cai|Água que fica gelatinosa|Parede de espinhos de papel|Campainha: abre outra porta (monstro)`.split("\n").map((l,n)=>{const p=l.split("|");return{id:"o"+n,t:p[0],i:p.slice(1)}});
+const KT="encrenca-tabelas-v1";let C=[];try{C=JSON.parse(localStorage.getItem(KT))||[]}catch(e){}
+const svC=()=>{try{localStorage.setItem(KT,JSON.stringify(C))}catch(e){}};
+const all=()=>C.map(x=>({...x,c:1})).concat(T);
+const rnd=n=>{const m=Math.floor(4294967296/n)*n,a=new Uint32Array(1);do{crypto.getRandomValues(a)}while(a[0]>=m);return a[0]%n+1};
+const norm=v=>v.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+let tabT="d",q=1,mod=0,adv=0,res=null,H=[],view=null,ed=null,lr=-1,query="";
+const sum=a=>a.reduce((u,v)=>u+v,0);
+function go(n){
+ const one=()=>[rnd(n)];
+ let tot=0,nat1=false,det=[];
+ for(let i=0;i<q;i++){let a=one(),note="";
+  if(adv&&q==1){const b=one();a=(adv>0?sum(a)>=sum(b):sum(a)<=sum(b))?a:b;note=" (2 dados)"}
+  if(i==0&&a[0]==1&&n<=12)nat1=true;
+  tot+=sum(a);det.push(a.join("+")+note)}
+ const lbl=q+"d"+n+(mod?(mod>0?"+":"")+mod:"")+(adv&&q==1?(adv>0?" vantagem":" desvantagem"):"");
+ res={lbl,tot:tot+mod,det:det.join(" | "),nat1};
+ H.unshift(lbl+": "+(tot+mod));H=H.slice(0,15);drawT();tumble(n);buzz(nat1);try{window.OBroll&&OBroll((s.nome||"Alguém")+" · "+lbl+": "+(tot+mod)+(nat1?" — Natural 1! Encrenca!":""),nat1)}catch(e){}}
+function lst(){
+ const n=norm(query.trim());
+ const r=all().map(x=>{const th=norm(x.t).includes(n),ih=n&&x.i.find(y=>norm(y).includes(n));return th||ih?{x,s:th?"":ih}:null}).filter(Boolean);
+ document.getElementById("lst").innerHTML=r.length?"<ul>"+r.map(({x,s})=>`<li><button class="t" style="border:0;background:none;padding:0" onclick="view='${x.id}';lr=-1;drawT()"><span>${esc(x.t)}${s?"<br><em>item: "+esc(s)+"</em>":""}</span><em>${x.c?"sua · ":""}d${x.i.length}</em></button></li>`).join("")+"</ul>":`<p class="hint">Nenhuma tabela encontrada. Tente outra palavra ou crie uma tabela nova.</p>`}
+function rollT(){const t=all().find(x=>x.id==view);lr=rnd(t.i.length)-1;drawT()}
+function cnt(){const n=document.getElementById("ei").value.split("\n").filter(x=>x.trim()).length;document.getElementById("ec").textContent=n+" de 20 itens"+(n>20?" (passou do limite)":"")}
+function saveT(){
+ const t=document.getElementById("et").value.trim(),i=document.getElementById("ei").value.split("\n").map(x=>x.trim()).filter(Boolean);
+ if(!t)return alert("Dê um nome à tabela.");
+ if(i.length<2)return alert("Coloque pelo menos 2 itens.");
+ if(i.length>20)return alert("Máximo de 20 itens por tabela. Remova "+(i.length-20)+".");
+ if(ed.id){const x=C.find(y=>y.id==ed.id);x.t=t;x.i=i}else{ed.id="c"+Date.now();C.unshift({id:ed.id,t,i})}
+ svC();view=ed.id;ed=null;lr=-1;drawT()}
+function delT(){if(confirm("Apagar esta tabela?")){C=C.filter(x=>x.id!=view);svC();view=null;drawT()}}
+function drawT(){
+ document.getElementById("navT").innerHTML=[["d","Dados"],["t","Tabelas"]].map(x=>`<button class="${tabT==x[0]?"on":""}" onclick="tabT='${x[0]}';view=null;ed=null;drawT()">${x[1]}</button>`).join("");
+ let h="";
+ if(tabT=="d")h=`<div class="g">${[4,6,8,10,12,20].map(n=>`<button class="d" onclick="go(${n})">d${n}</button>`).join("")}</div>
+ <div class="g g2" style="margin-top:12px"><label>Quantidade<input type="number" inputmode="numeric" min="1" max="10" value="${q}" onchange="q=Math.max(1,Math.min(10,+this.value||1))"></label>
+ <label>Bônus (ex.: +2 de perícia)<input type="number" inputmode="numeric" value="${mod}" onchange="mod=+this.value||0"></label></div>
+ 
+ <label style="margin-top:8px">Vantagem ou desvantagem (vale com 1 dado)<select onchange="adv=+this.value"><option value="0"${adv==0?" selected":""}>Normal</option><option value="1"${adv==1?" selected":""}>Vantagem: fica o maior</option><option value="-1"${adv==-1?" selected":""}>Desvantagem: fica o menor</option></select></label>
+ ${res?`<div class="res"><small>${esc(res.lbl)}</small><b>${res.tot}</b><small>${esc(res.det)}</small>${res.nat1?`<div class="warn">Natural 1: é Encrenca! Role na tabela de Complicações.</div>`:""}</div>`:`<p class="hint">Toque em um dado para rolar.</p>`}
+ ${H.length?`<h2>Últimas rolagens</h2><ul>${H.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}`;
+ if(tabT=="t"){
+  if(ed){h=`<h2>${ed.id?"Editar tabela":"Nova tabela"}</h2><label>Nome<input id="et" value="${esc(ed.t||"")}"></label>
+  <label style="margin-top:8px">Itens (um por linha, de 2 a 20)<textarea id="ei" oninput="cnt()">${esc((ed.i||[]).join("\n"))}</textarea></label><div class="hint" id="ec"></div>
+  <p class="hint">Todos os itens têm a mesma chance de sair.</p>
+  <button class="b" onclick="saveT()">Salvar tabela</button><button class="b x" onclick="ed=null;drawT()">Cancelar</button>`}
+  else if(view){const t=all().find(x=>x.id==view);
+  h=`<button class="b x" style="margin:0 0 8px" onclick="view=null;drawT()">Voltar às tabelas</button><h2>${esc(t.t)}</h2>
+  <button class="b" onclick="rollT()">Rolar d${t.i.length}</button>
+  ${lr>=0?`<div class="res"><small>Resultado ${lr+1}</small><b style="font-size:28px">${esc(t.i[lr])}</b></div>`:""}
+  <ul>${t.i.map((x,k)=>`<li class="${k==lr?"hit":""}">${k+1}. ${esc(x)}</li>`).join("")}</ul>
+  ${t.c?`<div class="g g2"><button class="b x" onclick="ed={id:view,t:'${""}',i:[]};ed.t=all().find(x=>x.id==view).t;ed.i=all().find(x=>x.id==view).i;drawT();cnt()">Editar</button><button class="b x" onclick="delT()">Apagar</button></div>`:`<p class="hint">Tabela oficial do livro: não pode ser alterada.</p>`}`}
+  else h=`<label>Buscar tabela<input id="sq" type="search" placeholder="Ex.: taverna, monstro, clima" value="${esc(query)}" oninput="query=this.value;lst()"></label>
+  <button class="b s" onclick="ed={id:null,t:'',i:[]};drawT();cnt()">Criar tabela nova</button><div id="lst"></div>`}
+ document.getElementById("appT").innerHTML=h;
+ if(tabT=="t"&&!view&&!ed)lst();if(ed)cnt()}
+drawT();
+
+let topTab="f";
+function drawTop(){
+ document.getElementById("top").innerHTML=[["f","Ficha"],["d","Dados"],["t","Tabelas"],["b","Bestiário"],["m","Masmorra"],["a","Aventura"]].concat(window.OB&&OB.gm?[["o","Mesa"]]:[]).map(x=>`<button class="${topTab==x[0]?"on":""}" onclick="goTop('${x[0]}')">${x[1]}</button>`).join("");
+ document.getElementById("secF").hidden=topTab!="f";document.getElementById("secT").hidden=!(topTab=="d"||topTab=="t");document.getElementById("secB").hidden=topTab!="b";document.getElementById("secD").hidden=topTab!="m";document.getElementById("secA").hidden=topTab!="a";document.getElementById("secO").hidden=topTab!="o"}
+const NM={Arcano:3,Necromante:3,Devoto:2,Rastreador:2,Farsante:2,Druida:2};
+const MO=`Gosma Gulosa|8|3|4|d4|Ácida: arma de metal que a acerta perde 1 de dano até ser afiada.
+Esqueleto Chato|6|5|5|d6|Desmonta: na 1ª vez que chega a 0, remonta com 3 de Vida no turno seguinte.
+Rato Gigante|3|4|4|d4|Bando: cada rato extra no mesmo alvo dá +1 de dano (máx. +3).
+Morcego Bêbado|4|6|4|d4|Voa em zigue-zague. Quem for mordido tem desvantagem no próximo teste.
+Troll de Ponte|20|5|6|d10|Regenera 1d4 de Vida por turno, a menos que sofra dano de fogo.
+Cogumelo Maluco|7|4|5|d6|Esporos: quem o acerta de perto tem desvantagem no próximo teste.
+Baú Mímico|12|5|6|d8|Agarra: se acertar, o alvo fica preso (Músculo Dif. 7 para soltar).
+Dragonete|16|7|6|d8|Sopro (1 por cena): 2d6 em todos num raio de 3 m (Reflexo Dif. 7 para metade).
+Lobo Rabugento|7|5|5|d6|Uivo (1 por cena): chama outro lobo (7 de Vida) para a luta.
+Aranha Gigante|9|5|5|d6|Teia: se acertar, prende o alvo (Músculo Dif. 7 para soltar).
+Fantasma Carente|6|6|4|d4|Etéreo: atravessa paredes e ataques físicos causam só metade do dano.
+Ogro Cozinheiro|18|5|6|d10|Panelada: se acertar, agarra o herói e tenta jogá-lo na panela (Músculo Dif. 7).
+Golem de Pedra|24|7|6|d10|Lento: ataca por último. Imune a veneno, sono e charme.
+Bandido Educado|5|5|5|d6|Sempre pede licença. Lábia Dif. 7 convence o bando a ir embora.
+Gárgula Preguiçosa|11|7|5|d8|Finge ser estátua (surpresa). Só luta se for provocada ou acordada.
+Bruxa do Pântano|10|5|5|d6|Caldeirão: 1 vez por cena lança uma Maldição Boba (Miolo Dif. 5 resiste).
+Zumbi Desastrado|10|3|4|d6|Lento: age por último. Cai uma vez, mas levanta de novo com 3 de Vida.
+Vespa Gigante|5|6|5|d4|Voa. Ferrão: o alvo fica envenenado (1d4 por turno, 2 turnos).
+Serpente Gigante|12|5|6|d6|Aperta: se acertar, prende o alvo (Músculo Dif. 7) e causa d6 por turno.
+Minotauro Perdido|20|6|7|d10|Investida: se andar 6 m antes de atacar, o dano é dobrado.
+Ent Mal-Humorado|24|6|6|d10|Raízes prendem 1 alvo (Músculo Dif. 7). Fogo causa +1d6 de dano nele.
+Elemental de Fogo|14|6|6|d8|Queima: quem o atinge de perto sofre 1. Imune a fogo; água dá +1d6.
+Olho Flutuante|12|7|6|d6|Olhar: 1 herói por turno faz Miolo Dif. 6 ou perde a ação. Flutua.
+Harpia Cantora|9|6|5|d6|Canto (1 por cena): Miolo Dif. 6 ou o herói perde o turno, encantado.
+Cavaleiro Sem Cabeça|16|7|7|d8|Imune a medo e sono. A cabeça gargalha: desvantagem em Lábia contra ele.
+Caranguejo Gigante|14|8|5|d8|Casco: armas d4 e d6 causam metade do dano. Pinça agarra (Músculo Dif. 7).
+Cão Infernal|12|6|6|d8|Hálito de fogo (1 por cena): 1d6 em cone curto (Reflexo Dif. 6 evita).
+Sapo Gigante|10|4|5|d6|Língua agarra alvo a 6 m e o puxa (Reflexo Dif. 6 evita). Engole Tralhas.
+Múmia Atrapalhada|14|5|6|d6|Maldição: quem for atingido tem desvantagem no próximo teste. Fraca a fogo.
+Gigante das Colinas|30|5|7|d12|Lento: ataca a cada 2 rodadas. Arremessa pedras à distância (d8).
+Sereia Ranzinza|9|6|5|d6|Canto (1 por cena): Miolo Dif. 6. Fora d’água, perde 2 de Defesa.
+Cubo de Gelatina|22|3|5|d6|Engole: quem for pego sofre 1d4 de ácido por turno (Músculo Dif. 7 sai).`.split("\n").map(l=>{const p=l.split("|");return{n:p[0],v:+p[1],d:+p[2],a:+p[3],dn:p[4],t:p[5]}});
+const BO=`Rei Gosma|10|30|4|5|d6|Engole a arma de quem o ferir (devolvida quando ele cai).|Abaixo de 15 de Vida: divide-se em 2 Gosmas Gulosas (8 de Vida cada).
+Rainha Aranha|20|40|6|6|d8|Teia: prende 1 herói por turno (Músculo Dif. 7 solta).|Abaixo de 20: chama 4 aranhinhas (3 de Vida, Ataque 4, d4).
+Golem Colosso|30|60|7|7|d10|Esmagar: acerta todos num raio de 3 m (Reflexo Dif. 7 evita).|Abaixo de 30: o chão racha e ele age 2 vezes por rodada.
+Rei Troll|40|80|6|7|d10|Regenera 1d6 por turno (fogo impede).|Abaixo de 40: Fúria! Dano sobe 1 degrau e perde a regeneração.
+Dragão Ancião|50|100|8|8|d12|Sopro a cada 3 turnos: 3d6 em todos (Reflexo Dif. 8 para metade).|Abaixo de 50: levanta voo; só ataques à distância o acertam.
+Rei Esqueleto|60|120|8|8|d10|Levanta 2 esqueletos comuns por turno.|Abaixo de 60: a armadura cai (Defesa 6), mas o dano sobe 1 degrau.`.split("\n").map(l=>{const p=l.split("|");return{n:p[0],andar:p[1],v:+p[2],d:+p[3],a:+p[4],dn:p[5],t:p[6],f:p[7],b:1}});
+const CAM=[["Livro ou camada 1 (andares 1 a 9)",0,0,0,5],["Camada 2 (andares 11 a 19)",3,0,0,6],["Camada 3 (andares 21 a 29)",6,1,0,7],["Camada 4 (andares 31 a 39)",9,1,1,8],["Camada 5 (andares 41 a 49)",12,2,1,9],["Camada 6+ (a partir do andar 51)",15,2,2,10]];
+var bq="",bc=0;
+function stepD(d,n){return D[Math.min(4,D.indexOf(d)+n)]}
+function monB(m,c,q){
+ const v=m.b?m.v:m.v+c[1],a=m.b?m.a:m.a+c[2],dn=m.b?m.dn:stepD(m.dn,c[3]);
+ return `<div class="pc"><div class="ph"><b>${esc(m.n)}</b>${m.b?`<span class="tag">Chefe · andar ${esc(m.andar)}</span>`:""}</div><div class="st"><div><b>${v}</b>Vida</div><div><b>${m.d}</b>Defesa</div><div><b>${a}</b>Ataque</div><div><b>${dn}</b>Dano</div></div><div class="hh">${esc(m.t)}</div>${m.b?`<div class="hh" style="margin-top:4px"><b>Fase 2:</b> ${esc(m.f)}</div>`:""}<button class="b s" data-c="${esc(JSON.stringify({n:m.n,v,d:m.d,a,dn,t:m.t}))}" onclick="addC(this.dataset.c,${q||1})">${q>1?"Levar os "+q+" para a luta":"Adicionar à luta"}</button></div>`}
+function listB(){
+ const n=norm(bq.trim()),c=CAM[bc],ok=m=>!n||norm(m.n+" "+m.t).includes(n);
+ const A=MO.filter(ok),B=BO.filter(ok);
+ let h=`<p class="hh">Bônus da camada nos monstros: +${c[1]} de Vida, +${c[2]} de Ataque, dano +${c[3]} degrau(s). Dificuldade de armadilhas e enigmas: ${c[4]}.</p>`;
+ h+=A.map(m=>monB(m,c)).join("");
+ if(B.length)h+=`<h2>Chefes da masmorra</h2><p class="hh">Chefes não recebem bônus de camada. Agem 1 vez por herói vivo (mínimo 2).</p>`+B.map(m=>monB(m,c)).join("");
+ if(!A.length&&!B.length)h+=`<p class="hint">Nenhum monstro encontrado.</p>`;
+ if(!n)h+=`<div class="hint"><b>Monstro na hora:</b> Vida 3 (capanga), 8 (valentão), 16 (chefe), 20+ (monstrão). Defesa 3 a 8, Ataque 4 a 7. Dano d4 fraco, d6 comum, d8 perigoso, d10 brutal. Dê um truque a cada monstro.</div>`;
+ document.getElementById("bl").innerHTML=h}
+function sorteB(){bq=MO[rnd(MO.length)-1].n;drawB()}
+function drawBm(){
+ document.getElementById("appB").innerHTML=`<h2>Bestiário</h2><label>Buscar por nome ou habilidade<input id="bs" value="${esc(bq)}" oninput="bq=this.value;listB()"></label><label>Camada da masmorra<select onchange="bc=+this.value;listB()">${CAM.map((x,i)=>`<option value="${i}"${i==bc?" selected":""}>${x[0]}</option>`).join("")}</select></label><button class="b s" onclick="sorteB()">Sortear um monstro</button><div id="bl"></div>`;
+ listB()}
+const MK="encrenca-masmorra-v1",TB=n=>T.find(x=>x.t==n).i,PK=a=>a[rnd(a.length)-1],cam=f=>Math.min(6,Math.floor((f-1)/10)+1);
+const ML=["Gosma Gulosa,Rato Gigante,Morcego Bêbado,Cogumelo Maluco,Esqueleto Chato,Bandido Educado".split(","),"Lobo Rabugento,Aranha Gigante,Fantasma Carente,Baú Mímico,Gárgula Preguiçosa,Bruxa do Pântano".split(",")];
+const RID=`Tenho cidades, mas não tenho casas. Tenho rios, mas não tenho água. O que sou?|Um mapa|Você me abre e me dobra.
+Quanto mais você tira de mim, maior eu fico. O que sou?|Um buraco|Pense em quem cava.
+Ando sem pés, voo sem asas e choro sem olhos. O que sou?|A nuvem|Olhe para o céu.
+Tenho dentes, mas não mordo ninguém. O que sou?|Um pente|Passa pelo cabelo.
+Quanto mais eu seco, mais molhada fico. O que sou?|A toalha|Todo banho termina com ela.
+Sou leve como uma pluma, mas nem o mais forte me segura por 1 minuto. O que sou?|O fôlego (a respiração)|Tente segurar.
+Tenho boca, mas não falo. Tenho leito, mas não durmo. O que sou?|O rio|Ele corre e nunca para.
+Sou alto quando jovem e baixo quando velho. O que sou?|Uma vela|Acendo e vou acabando.
+Tenho mãos, mas não posso aplaudir. Tenho rosto, mas nunca sorrio. O que sou?|Um relógio|Pense no tempo.
+Quanto mais me alimentam, mais eu cresço. Se me derem água, eu morro. O que sou?|O fogo|Dá calor e luz.
+Três estátuas, só uma diz a verdade. OURO: “O tesouro está na de prata.” PRATA: “O tesouro não está aqui.” BRONZE: “O tesouro não está na de ouro.” Onde ele está?|Na estátua de ouro|Teste cada lugar e conte quantas verdades.
+Estou sempre à sua frente, mas você nunca consegue me ver. O que sou?|O futuro|Ele ainda vai chegar.
+Quanto mais eu cresço, menos você enxerga. O que sou?|A escuridão|As tochas me assustam.
+Tenho cabeça e cauda, mas não tenho corpo. O que sou?|Uma moeda|Cara ou coroa.
+Posso ser quebrada sem ser tocada, dada sem ser entregue. O que sou?|Uma promessa|Não pesa, mas pesa.
+Sou feito de água, mas se me colocarem na água, eu desapareço. O que sou?|O gelo|Gosto de frio.
+O rico precisa de mim, o pobre tem, e se alguém me comer, morre. O que sou?|Nada|Pense em “nada”.
+Um pastor tem de atravessar um rio com um lobo, uma ovelha e um repolho. O barco leva só ele e mais um. Como atravessa sem perdas?|Leva a ovelha; volta; leva o lobo; volta com a ovelha; leva o repolho; volta; leva a ovelha.|Quem pode ficar sozinho com quem?
+Duas portas, dois guardas: um sempre mente, o outro sempre diz a verdade. Uma porta leva à saída. Você faz 1 pergunta a 1 guarda. Qual?|Pergunte: “Qual porta o outro guarda diria que é a saída?” e escolha a outra.|Use a mentira contra ela mesma.
+Quanto mais eu seco, mais tempo duro; quanto mais me usam, menos tenho. O que sou?|Um sabão (ou sabonete)|Fica no banheiro.
+Piso xadrez: para cruzar o salão, só as casas escuras são seguras.|Um teste de Miolo (Dif. da camada) revela o padrão. Pisar numa casa clara dispara a armadilha.|Observe a cor das casas.
+Quatro alavancas (Vermelha, Azul, Verde e Amarela, em fila). A placa diz: “A certa não é a primeira, nem a última, e fica ao lado da azul.”|A Verde.|Elimine a primeira e a última.
+Espelho sincronizado: todos os heróis precisam tocar o espelho ao mesmo tempo.|Contem até 3 e toquem juntos. Se alguém se atrasar, um reflexo ataca.|Combinem a contagem antes.
+Balança faminta: a porta só abre se a balança ficar equilibrada com exatamente 7 cobres (ou 7 Tralhas pequenas).|Exatamente 7, nem mais, nem menos.|Conte com cuidado.
+Estátuas musicais: quatro estátuas tocam notas. O Mestre bate uma sequência (por exemplo, 3-1-2-4) e os heróis a repetem tocando as estátuas na ordem.|Se errarem, um monstro desperta.|Memorize a ordem.
+Ponte de letras: pedras com letras formam o caminho, e só as letras de F-O-G-O, na ordem, aguentam o peso. Pista na parede: “Quente, vermelho, dança.”|Pisar em F, O, G, O, nessa ordem. Pisar errado é queda (1d6).|A pista descreve o fogo.
+Cofre dos números: cofre de 3 dígitos. Placa: “O 1º é a metade do 2º; o 3º é a soma dos dois; a soma de tudo é 6.”|1-2-3.|Se o 1º é x, o 2º é 2x.
+Labirinto escuro: sem luz, o corredor se ramifica sempre.|Quem encosta a mão numa parede e a segue sem soltar sai em 3 turnos. Quem corre às cegas gasta 1d4 turnos e 1 Vida.|Siga sempre a mesma parede.`.split("\n").map(l=>l.split("|"));
+var run=null,rec=[],mPeek=false;
+try{const o=JSON.parse(localStorage.getItem(MK));if(o){run=o.run;rec=o.rec||[]}}catch(e){}
+function mSave(){try{localStorage.setItem(MK,JSON.stringify({run,rec}))}catch(e){}}
+function fight(f,k){
+ const c=cam(f),cc=k=="e"?Math.min(6,c+1):c,pl=cc==1?ML[0]:cc==2?ML[1]:cc==3?ML[1].concat(["Troll de Ponte","Ogro Cozinheiro","Golem de Pedra","Dragonete"]):MO.map(x=>x.n),ms=pl.map(n=>MO.find(m=>m.n==n));
+ let m;if(k=="b"){const w=ms.filter(x=>x.v<=5);m=PK(w.length?w:ms)}else if(k=="s")m=ms.slice().sort((a,b)=>b.v-a.v)[0];else m=PK(ms);
+ const q=k=="s"||k=="e"?1:Math.min(8,(m.v<=5?2:1)*run.heroes);
+ let h=`<p><b>${q>1?q+" × ":""}${esc(m.n)}</b></p>`+monB(m,CAM[cc-1],q);
+ if(k=="e")h+=`<div class="hint"><b>Elite:</b> ${esc(PK(TB("Masmorra: modificador de elite").concat(TB("Masmorra: modificador de elite II"))))}</div>`;
+ if(k=="m")h+=`<div class="hint">Emboscada: os monstros agem primeiro.</div>`;
+ return h}
+const trap=f=>{const c=cam(f);return `<p><b>${esc(PK(TB("Masmorra: armadilhas (1d6 × camada)").concat(TB("Masmorra: armadilhas II (1d6 × camada)"))))}</b></p><div class="hint">Reflexo ou Miolo, Dif. ${CAM[c-1][4]}. Dano: ${c}d6.</div>`};
+const rid=f=>{const r=PK(RID);return `<p>${esc(r[0])}</p><details><summary>Dica e resposta (mestre)</summary><p class="hh">Dica: ${esc(r[2])}<br>Resposta: ${esc(r[1])}</p></details><div class="hint">Resolver dá Recompensa. Errar ou desistir cobre o preço: uma armadilha, um combate ou 1d6 × ${cam(f)} de dano.</div>`};
+const sit=()=>PK(TB("Masmorra: situações").concat(TB("Masmorra: situações II")));
+const rw=()=>PK(TB("Masmorra: recompensa de sala"));
+function gen(i,f){
+ const c=cam(f);
+ switch(i){
+ case 1:return["·","Sala vazia","Só poeira e ecos."];
+ case 2:return["·","Sala vazia com Tralha","Há 1 Tralha escondida: "+esc(PK(TB("Tralhas do bolso")))+"."];
+ case 3:return["C","Combate comum",fight(f,"c")];
+ case 4:return["C","Combate: bando de fracos",fight(f,"b")];
+ case 5:return["C","Combate: monstrão solitário",fight(f,"s")];
+ case 6:return["C","Combate: emboscada",fight(f,"m")];
+ case 7:return["G","Guardião: lute ou resolva o enigma",fight(f,"c")+rid(f)];
+ case 8:return["A","Armadilha",trap(f)];
+ case 9:return["A","Armadilha com tesouro de isca",trap(f)+`<div class="hint">Isca: ${esc(rw())}</div>`];
+ case 10:return["?","Enigma",rid(f)];
+ case 11:return["?","Enigma de recompensa dupla",rid(f)+`<div class="hint">Recompensa dupla: role 2 vezes.</div>`];
+ case 12:return["!","Situação estranha",`<p>${esc(sit())}</p>`];
+ case 13:return["!","Situação perigosa",`<p>${esc(sit())}</p>`+trap(f)];
+ case 14:return["T","Sala do Tesouro",`<p>${esc(rw())}</p>`];
+ case 15:return["F","Fogueira (Sala Segura)",`<p>Descanso sem ronda. ${esc(PK(TB("Masmorra: na fogueira")))}</p>`];
+ case 16:{const it=TB("Masmorra: mercador misterioso").concat(TB("Masmorra: mercador II")),o=[];while(o.length<4){const x=PK(it);if(!o.includes(x))o.push(x)}return["M","Mercador Misterioso","<ul>"+o.map(x=>`<li>${esc(x)}</li>`).join("")+"</ul>"]}
+ case 17:return["S","Santuário",`<p>${esc(PK(TB("Masmorra: santuário e altar")))}</p>`];
+ case 18:return["★","Combate de Elite",fight(f,"e")];
+ case 19:return["F","Falsa Sala Segura","<p>Parece uma Fogueira, mas é um Mímico!</p>"+monB(MO.find(m=>m.n=="Baú Mímico"),CAM[c-1])];
+ default:return["↓","Atalho","A escada está aqui! Ela aparece no mapa."]}}
+function genMap(f){
+ if(f%10==0){const b=BO[(f/10-1)%6],l=Math.floor((f/10-1)/6),m={...b,v:b.v+40*l,a:b.a+l};
+  return{r:[{x:0,y:0,k:2,s:"E",nm:"Entrada",h:"Vocês chegam ao andar do chefe.",a:PK(TB("Masmorra: ambiente da sala")),c:"",e:1},{x:1,y:0,k:1,s:"F",nm:"Fogueira (Sala Segura)",h:`<p>Descansem antes da luta. ${esc(PK(TB("Masmorra: na fogueira")))}</p>`,i:0},{x:2,y:0,k:0,s:"B",nm:"Arena do Chefe",h:monB(m,CAM[0]),i:0,bs:1}]}}
+ const n=[6,6,7,7,8,8][rnd(6)-1],cs=[[0,0]],D4=[[1,0],[-1,0],[0,1],[0,-1]],has=(x,y)=>cs.some(z=>z[0]==x&&z[1]==y);
+ while(cs.length<n){const c=PK(cs),d=PK(D4),x=c[0]+d[0],y=c[1]+d[1];if(x>=0&&x<4&&y>=0&&y<2&&!has(x,y))cs.push([x,y])}
+ const ds={"0,0":0},q=[[0,0]];
+ while(q.length){const [x,y]=q.shift();for(const [dx,dy] of D4){const k=(x+dx)+","+(y+dy);if(!(k in ds)&&has(x+dx,y+dy)){ds[k]=ds[x+","+y]+1;q.push([x+dx,y+dy])}}}
+ const dd=z=>ds[z[0]+","+z[1]],mx=Math.max(...cs.map(dd)),st=PK(cs.filter(z=>dd(z)==mx));
+ const r=cs.map((z,j)=>{const o={x:z[0],y:z[1],k:0,i:rnd(20)};if(j==0){o.k=2;o.e=1;o.s="E";o.nm="Entrada";o.h="Vocês chegam ao andar "+f+".";o.a=PK(TB("Masmorra: ambiente da sala"));o.c=""}if(z==st){o.st=1;o.s="↓";o.nm="Escada";o.h="A escada para o andar "+(f+1)+".";o.i=0}return o});
+ return{r}}
+function neigh(j){const r=run.map.r,a=r[j];return r.map((b,i)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y)==1?i:-1).filter(i=>i>=0)}
+function expose(j){neigh(j).forEach(i=>{const b=run.map.r[i];if(b.k==0)b.k=1})}
+function newFloor(){run.map=genMap(run.f);run.sel=0;run.pd=false;expose(0)}
+function startRun(){run={f:1,heroes:+document.getElementById("nh").value,vis:0,boss:0,cobres:0,relics:[],nv:1,al:"",ms:"",pk:null,pd:false,sel:0,map:null};newFloor();drawMs()}
+function openR(j){
+ const r=run.map.r[j];run.sel=j;
+ if(r.k==1){
+  r.k=2;run.vis++;r.a=PK(TB("Masmorra: ambiente da sala"));r.c=PK(TB("Masmorra: no corredor"));
+  if(!r.h){const g=gen(r.i,run.f);r.s=g[0];r.nm=g[1];r.h=g[2];if(r.i==20){const s=run.map.r.find(z=>z.st);if(s&&s.k==0)s.k=1}}
+  expose(j);
+  if(run.vis%3==0)ronda("A cada 3 salas visitadas")}
+ drawMs()}
+function ronda(m){const d=rnd(6);run.al=`<b>Ronda de perigo (${m}) · d6 = ${d}:</b> `+(d<=2?"um monstro errante aparece!"+fight(run.f,"c"):"nada acontece.")}
+function descansar(){ronda("descanso fora de sala segura");drawMs()}
+function extra(j){const r=run.map.r[j];(r.rw=r.rw||[]).push(rw());drawMs()}
+function okR(j){const r=run.map.r[j];r.ok=!r.ok;drawMs()}
+function bossWin(j){
+ run.boss++;run.map.r[j].ok=1;
+ const all=TB("Masmorra: Relíquias").concat(TB("Masmorra: Relíquias II")).filter(x=>!run.relics.includes(x)),o=[];
+ while(o.length<4&&all.length>o.length){const x=PK(all);if(!o.includes(x))o.push(x)}
+ run.pk=o.length?{q:2,o}:null;run.pd=!o.length;
+ run.ms=`Chefe derrotado! Cura total, +1 Ponto de Sorte para todos, ${50*cam(run.f)} cobres e 25 pontos.`+(run.nv>=5?" Nível 5: +4 de Vida e +1 em um atributo para todos.":"");
+ drawMs()}
+function pickR(i){
+ run.relics.push(run.pk.o[i]);run.pk.o.splice(i,1);run.pk.q--;
+ if(run.pk.q<=0||!run.pk.o.length){run.pk=null;run.pd=true}
+ drawMs()}
+function descer(){
+ const f=run.f;
+ if(!run.pd&&f%2==0&&f%10!=0){const all=TB("Masmorra: Relíquias").concat(TB("Masmorra: Relíquias II")).filter(x=>!run.relics.includes(x)),o=[];while(o.length<3&&all.length>o.length){const x=PK(all);if(!o.includes(x))o.push(x)}if(o.length){run.pk={q:1,o};return drawMs()}}
+ run.f++;run.ms="";
+ if([3,5,7,9].includes(run.f)){run.nv++;run.ms="Todos sobem para o nível "+run.nv+": +4 de Vida, +1 PM (conjuradores) e 1 Talento."+(run.nv==3||run.nv==5?" Também +1 em um atributo.":"")}
+ newFloor();drawMs()}
+const pts=()=>(run.f-1)*10+run.boss*25+run.relics.length*5+Math.floor(run.cobres/10);
+function fimR(){
+ if(!confirm("Encerrar a descida e salvar no registro?"))return;
+ rec.unshift({d:Date.now(),f:run.f,p:pts(),h:run.heroes,b:run.boss});rec=rec.slice(0,20);run=null;drawMs()}
+function drawMs(){
+ const el=document.getElementById("appD");let h="<h2>Masmorra Infinita</h2>";
+ if(!run){
+  h+=`<div class="pc"><b>Nova descida</b><p class="hh">Sem história: o grupo desce andar por andar, enfrenta um Chefe a cada 10 andares e tenta chegar o mais fundo possível. Os mapas e as salas são sorteados sozinhos.</p><label>Quantos heróis vão descer?<select id="nh">${[1,2,3,4,5].map(n=>`<option${n==4?" selected":""}>${n}</option>`).join("")}</select></label><button class="b" onclick="startRun()">Começar a descida</button></div>`;
+  h+=`<h2>Registro da descida</h2><ul>${rec.map(x=>`<li><b>Andar ${x.f}</b> · ${x.p} pontos · ${x.h} heróis · ${x.b} chefes<br><span class="hh">${new Date(x.d).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})}</span></li>`).join("")||"<li>Nenhuma descida ainda. Bata o recorde da mesa!</li>"}</ul>`;
+  el.innerHTML=h;mSave();return}
+ const f=run.f,c=cam(f),C=CAM[c-1],R=run.map.r,rm=R[run.sel];
+ h+=`<div class="pc"><div class="ph"><b>Andar ${f}${f%10==0?" · Chefe":""}</b><span>Camada ${c} · nível ${run.nv} · ${run.heroes} heróis</span></div><div class="hh">Bônus: +${C[1]} Vida, +${C[2]} Ataque · Dif. ${C[4]} · Pontos: <b>${pts()}</b> · Salas abertas: ${run.vis} · Chefes: ${run.boss}</div></div>`;
+ if(run.ms)h+=`<div class="hint"><b>${esc(run.ms)}</b></div>`;
+ if(run.al)h+=`<div class="hint">${run.al}<button class="b x" onclick="run.al='';drawMs()">Entendido</button></div>`;
+ if(run.pk)h+=`<div class="pc"><b>Escolha ${run.pk.q} Relíquia${run.pk.q>1?"s":""}</b><ul>${run.pk.o.map((x,i)=>`<li>${esc(x)}<button class="b s" onclick="pickR(${i})">Pegar</button></li>`).join("")}</ul></div>`;
+ const sym=r=>r.k==2?r.s:r.k==1?"?":mPeek&&r.s?r.s:(mPeek?"·":"");
+ let g="";for(let y=0;y<2;y++)for(let x=0;x<4;x++){const j=R.findIndex(r=>r.x==x&&r.y==y);
+  if(j<0){g+=`<div class="cl x"></div>`;continue}
+  const r=R[j];g+=`<div class="cl ${r.k==2?"v":r.k==1?"d":""}${j==run.sel&&r.k==2?" on":""}" ${r.k>0?`onclick="openR(${j})"`:""}>${sym(r)}</div>`}
+ h+=`<div class="mp">${g}</div><label><input type="checkbox" ${mPeek?"checked":""} onchange="mPeek=this.checked;drawMs()">Mestre: mostrar o tipo de todas as salas</label>`;
+ if(rm&&rm.k==2){
+  const sa=rm.st||(rm.bs&&rm.ok);
+  h+=`<div class="pc"><div class="ph"><b>${esc(rm.nm)}</b><span class="tag">${esc(rm.s)}</span></div>${rm.a||rm.c?`<div class="hh">${rm.a?"Ambiente: "+esc(rm.a):""}${rm.c?" · No corredor: "+esc(rm.c):""}</div>`:""}${rm.h}${(rm.rw||[]).map(x=>`<div class="hint">Recompensa: ${esc(x)} (camada ${c})</div>`).join("")}`;
+  if(rm.bs&&!rm.ok)h+=`<button class="b" onclick="bossWin(${run.sel})">Chefe derrotado</button>`;
+  if(!rm.e&&!rm.st&&!rm.bs&&!rm.e)h+=`<div class="g"><button class="b s" onclick="extra(${run.sel})">Rolar recompensa</button><button class="b x" onclick="okR(${run.sel})">${rm.ok?"Resolvida ✓":"Marcar resolvida"}</button></div>`;
+  if(sa)h+=`<button class="b" onclick="descer()">Descer para o andar ${f+1}</button>`;
+  h+=`</div>`}
+ h+=`<div class="g"><label>Cobres do grupo<input type="number" inputmode="numeric" value="${run.cobres}" onchange="run.cobres=Math.max(0,+this.value||0);drawMs()"></label><button class="b s" style="align-self:end" onclick="descansar()">Descansar fora de sala segura</button></div>`;
+ h+=`<h2>Relíquias do grupo (${run.relics.length})</h2><ul>${run.relics.map((x,i)=>`<li>${esc(x)}<button class="b x" style="width:auto;margin:6px 0 0" onclick="run.relics.splice(${i},1);drawMs()">Perdida</button></li>`).join("")||"<li>Nenhuma ainda. Em andares pares o grupo escolhe 1 de 3.</li>"}</ul>`;
+ h+=`<button class="b x" onclick="fimR()">Encerrar a descida</button>`;
+ el.innerHTML=h;mSave()}
+function novaFicha(){const id="f"+Date.now();FL.list[FL.cur]=s;FL.list[id]=blank();FL.cur=id;s=FL.list[id];castMsg="";save();drawF()}
+function trocar(id){if(!FL.list[id])return;FL.list[FL.cur]=s;FL.cur=id;s=FL.list[id];castMsg="";save();drawF()}
+function excluirFicha(){
+ if(!confirm("Excluir esta ficha de vez? Copie o backup antes se quiser guardá-la."))return;
+ delete FL.list[FL.cur];
+ const ks=Object.keys(FL.list);if(!ks.length){FL.list.a=blank();ks.push("a")}
+ FL.cur=ks[0];s=FL.list[FL.cur];castMsg="";save();drawF()}
+function buzz(n1){try{navigator.vibrate&&navigator.vibrate(n1?[60,40,60]:35)}catch(e){}}
+function tumble(n){
+ if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ const b=document.querySelector("#secT .res b");if(!b)return;
+ const f=b.textContent;let k=0;b.classList.add("pop");
+ const t=setInterval(()=>{b.textContent=1+Math.floor(Math.random()*n);if(++k>=7){clearInterval(t);b.textContent=f}},70)}
+function toast(m){const e=document.createElement("div");e.className="toast";e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),1800)}
+var CB={r:1,n:0,l:[],dm:1},bt="m";
+try{const o=JSON.parse(localStorage.getItem("encrenca-combate-v1"));if(o&&o.l)CB=o}catch(e){}
+const cbS=()=>{try{localStorage.setItem("encrenca-combate-v1",JSON.stringify(CB))}catch(e){}};
+function addC(j,q){
+ const m=JSON.parse(j);q=q||1;let k=CB.l.filter(x=>x.b==m.n).length;
+ for(let i=0;i<q;i++){CB.l.push({id:++CB.n,b:m.n,n:(k>0||q>1)?m.n+" "+(k+1):m.n,v:m.v,h:m.v,d:m.d,a:m.a,dn:m.dn,t:m.t||"",ok:0});k++}
+ cbS();toast((q>1?q+" × ":"")+m.n+" na luta");
+ if(topTab=="b"&&bt=="c")drawC()}
+function cbHp(id,sg){const x=CB.l.find(z=>z.id==id);x.h=Math.max(0,Math.min(x.v,x.h+sg*CB.dm));cbS();drawC()}
+function cbAg(id){const x=CB.l.find(z=>z.id==id);x.ok=x.ok?0:1;cbS();drawC()}
+function cbDel(id){CB.l=CB.l.filter(z=>z.id!=id);cbS();drawC()}
+function cbRod(){CB.r++;CB.l.forEach(x=>x.ok=0);cbS();drawC()}
+function cbClr(){if(!confirm("Limpar a luta e voltar para a rodada 1?"))return;CB.l=[];CB.r=1;cbS();drawC()}
+function cbNew(){
+ const n=document.getElementById("cmn").value.trim(),v=Math.max(1,+document.getElementById("cmv").value||1);
+ if(!n)return toast("Dê um nome ao combatente.");
+ CB.l.push({id:++CB.n,b:n,n,v,h:v,d:0,a:0,dn:"",t:"",ok:0});cbS();drawC()}
+const bsw=()=>`<div class="g"><button class="b ${bt=="m"?"":"x"}" onclick="bt='m';drawB()">Monstros</button><button class="b ${bt=="c"?"":"x"}" onclick="bt='c';drawB()">Combate (${CB.l.length})</button></div>`;
+function drawC(){
+ let h=bsw()+`<h2>Combate</h2><div class="pc"><div class="ph"><b>Rodada ${CB.r}</b><span>Heróis agem primeiro, depois os inimigos.</span></div><div class="g"><button class="b s" onclick="cbRod()">Nova rodada</button><button class="b x" onclick="cbClr()">Limpar luta</button></div><label>Valor de dano ou cura<input type="number" inputmode="numeric" value="${CB.dm}" onchange="CB.dm=Math.max(0,+this.value||0);cbS()"></label></div>`;
+ h+=CB.l.map(x=>{const pc=Math.max(0,Math.min(100,100*x.h/x.v));return `<div class="pc${x.h<=0?" dead":""}"><div class="ph"><b>${esc(x.n)}</b><span>${x.dn?"Def "+x.d+" · Atq "+x.a+" · "+esc(x.dn):""}</span><button onclick="cbDel(${x.id})" aria-label="Remover">✕</button></div><div class="bar"><i style="width:${pc}%;background:${pc<=30?"#c0392b":"#2e9e5b"}"></i></div><div class="hh"><b>Vida ${x.h}/${x.v}</b>${x.h<=0?" · derrotado":""}${x.t?" · "+esc(x.t):""}</div><div class="g" style="grid-template-columns:repeat(3,1fr)"><button class="b x" onclick="cbHp(${x.id},-1)">Dano</button><button class="b x" onclick="cbHp(${x.id},1)">Cura</button><button class="b ${x.ok?"s":"x"}" onclick="cbAg(${x.id})">${x.ok?"Agiu ✓":"Agiu?"}</button></div></div>`}).join("")||`<p class="hint">Nenhum combatente. Toque em "Adicionar à luta" em um monstro, ou adicione abaixo.</p>`;
+ h+=`<div class="pc"><b>Adicionar manualmente</b> <span class="hh">(herói, aliado ou NPC)</span><div class="g"><label>Nome<input id="cmn"></label><label>Vida<input id="cmv" type="number" inputmode="numeric" value="10"></label></div><button class="b" onclick="cbNew()">Adicionar</button></div>`;
+ document.getElementById("appB").innerHTML=h}
+function drawB(){if(bt=="c")return drawC();drawBm();document.getElementById("appB").insertAdjacentHTML("afterbegin",bsw())}
+var AV={};
+const AVK=[["loc","Local da aventura","Local"],["prob","Problema","Problema"],["ame","Ameaça","Ameaça"],["rev","Reviravolta","Reviravolta"],["npc","Quem é esse NPC?","NPC do gancho"],["enc","Encontro no caminho","Encontro no caminho"],["mon","Monstro aleatório","Monstro do clímax"],["vil","O que o vilão quer?","O vilão quer"],["tes","Tesouro","Tesouro"],["cli","Clima","Clima"]];
+try{const o=JSON.parse(localStorage.getItem("encrenca-aventura-v1"));if(o)AV=o}catch(e){}
+const avS=()=>{try{localStorage.setItem("encrenca-aventura-v1",JSON.stringify(AV))}catch(e){}};
+function avR(k){AV[k]=PK(TB(AVK.find(x=>x[0]==k)[1]));avS();drawA()}
+function avAll(){AVK.forEach(d=>AV[d[0]]=PK(TB(d[1])));avS();drawA()}
+function avTxt(){const g=k=>AV[k];return["AVENTURA DE UMA HORA","Local: "+g("loc"),"Problema: "+g("prob"),"Ameaça: "+g("ame"),"Reviravolta: "+g("rev"),"","Cena 1 · gancho (10 min): "+g("npc")+" pede ajuda ou o problema cai no colo do grupo. Clima: "+g("cli")+".","Cena 2 · caminho (20 min): "+g("enc")+".","Cena 3 · clímax (20 min): a ameaça aparece ("+g("ame")+"; monstro: "+g("mon")+"). O vilão quer: "+g("vil")+". Reviravolta no meio do combate: "+g("rev")+".","Final (10 min): tesouro: "+g("tes")+". Epílogo engraçado e “Quem quer jogar de novo?”"].join("\n")}
+function avCopy(){const e=document.createElement("textarea");e.value=avTxt();document.body.appendChild(e);copyEl(e,"Roteiro copiado.").finally(()=>e.remove())}
+function drawA(){
+ const el=document.getElementById("appA");let h=`<h2>Aventura de uma hora</h2><button class="b" onclick="avAll()">Sortear aventura completa</button>`;
+ if(!AV.loc){el.innerHTML=h+`<p class="hint">Toque em sortear. O app escolhe Local, Problema, Ameaça e Reviravolta e já monta as cenas, como na receita do Guia do Mestre.</p>`;return}
+ const g=k=>esc(AV[k]),row=k=>`<li><span class="hh">${AVK.find(x=>x[0]==k)[2]}</span><br><b>${g(k)}</b> <button class="b x" style="width:auto;margin:4px 0 0;padding:4px 10px" onclick="avR('${k}')" aria-label="Sortear de novo">↻</button></li>`;
+ h+=`<ul>${["loc","prob","ame","rev"].map(row).join("")}</ul><h2>As cenas</h2>
+ <div class="pc"><b>Cena 1 · O gancho (10 min)</b><p>Comece no meio da ação. <b>${g("npc")}</b> pede ajuda ou o problema cai no colo do grupo. Clima: ${g("cli")}.</p></div>
+ <div class="pc"><b>Cena 2 · O caminho (20 min)</b><p>Um encontro, uma sala ou um obstáculo: <b>${g("enc")}</b>. Deixe cada jogador brilhar pelo menos uma vez.</p></div>
+ <div class="pc"><b>Cena 3 · O clímax (20 min)</b><p>A ameaça aparece: <b>${g("ame")}</b>. Monstro sugerido: ${g("mon")} (veja no Bestiário). O vilão quer: ${g("vil")}. No meio do combate, solte a reviravolta: <b>${g("rev")}</b>.</p></div>
+ <div class="pc"><b>Final (10 min)</b><p>Tesouro: ${g("tes")}. Epílogo engraçado e a pergunta: “Quem quer jogar de novo?”</p></div>
+ <h2>Ajustar o que foi sorteado</h2><ul>${["npc","enc","mon","vil","tes","cli"].map(row).join("")}</ul>
+ <div class="g"><button class="b s" onclick="avCopy()">Copiar roteiro</button><button class="b x" onclick="avAll()">Sortear tudo de novo</button></div>`;
+ el.innerHTML=h}
+function hero(){
+ if(!confirm("Criar um herói aleatório substitui a ficha atual (o histórico fica). Continuar?"))return;
+ const tb=n=>T.find(x=>x.t==n).i,pk=a=>a[rnd(a.length)-1];
+ set("raca",pk(RA)[0]);set("classe",pk(CL).n);fill(1);
+ const w=pk(tb("Nomes e apelidos")).split(" "),ni=w[0]=="Dona"?2:1;
+ set("nome",w.slice(0,ni).join(" "));set("apelido",w.slice(ni).join(" "));
+ set("notas","Aparência: "+pk(tb("Aparência"))+". Mania: "+pk(tb("Manias"))+".");
+ const tr=tb("Tralhas do bolso"),a=pk(tr);let b=pk(tr);while(b==a)b=pk(tr);
+ s.itens.push(a,b);log("Tralhas sorteadas: "+a+", "+b);
+ s.cm=[];s.grim=[];
+ const pool=grim().filter(x=>!x.u&&(CLL[s.classe]||"@").split(" ").some(l=>x.c.split(" ").includes(l)));
+ while(s.grim.length<(NM[s.classe]||0)&&pool.length)s.grim.push(pool.splice(rnd(pool.length)-1,1)[0].n);
+ if(s.grim.length)log("Magias sorteadas: "+s.grim.join(", "));
+ drawF()}
+function goTop(x){topTab=x;if(x=="d"||x=="t"){tabT=x;view=null;ed=null;drawT()}if(x=="b")drawB();if(x=="m")drawMs();if(x=="a")drawA();if(x=="o"&&window.OBdraw)OBdraw();drawTop()}
+drawTop();
+</script>
+<script>
+/* ===== Integração com o Owlbear Rodeo =====
+   Só liga quando o app roda dentro de um iframe (ou seja, dentro do Owlbear).
+   Fora dele (aberto direto no navegador), nada muda. */
+(function(){
+ if(window.self===window.top)return;
+ var SDKS=["https://cdn.jsdelivr.net/npm/@owlbear-rodeo/sdk@3.1.0/dist/obr.min.js","https://unpkg.com/@owlbear-rodeo/sdk@3.1.0/dist/obr.min.js"];
+ var PRE="com.encrenca.mesa/",CH="com.encrenca.mesa.rolagem",LIM=16000,MAXF=2300;
+ var ob=window.OB={gm:false,id:"",nome:"",fichas:{},players:[],bytes:0,pronto:false};
+ var ultimo="",tm=null,avisouErro=false,pend=null;
+
+ function toastL(m){var e=document.createElement("div");e.className="toast";e.style.maxWidth="90%";e.textContent=String(m).slice(0,220);document.body.appendChild(e);setTimeout(function(){e.remove()},5200)}
+
+ /* Alguns iframes bloqueiam confirm() e alert(). Se a janela for bloqueada (volta na hora),
+    o app mostra um aviso e pede um segundo toque na mesma ação para confirmar. */
+ var nConfirm=window.confirm.bind(window),nAlert=window.alert.bind(window);
+ window.confirm=function(m){
+  var t=performance.now(),r=nConfirm(m);
+  if(r)return true;
+  if(performance.now()-t<30){
+   if(pend&&pend.m===m&&Date.now()-pend.t<8000){pend=null;return true}
+   pend={m:m,t:Date.now()};
+   toastL("Toque de novo na mesma ação para confirmar: "+String(m).slice(0,110));
+  }
+  return false};
+ window.alert=function(m){var t=performance.now();nAlert(m);if(performance.now()-t<30)toastL(m)};
+
+ function cut(v,n){v=String(v==null?"":v);return v.length>n?v.slice(0,n):v}
+ function by(o){var j=JSON.stringify(o);try{return new TextEncoder().encode(j).length}catch(e){return j.length}}
+ function semT(k,v){return k==="t"?undefined:v}
+
+ /* versão enxuta da ficha que vai para a sala (sem histórico) */
+ function pack(f){
+  var o={n:cut(f.nome,40),a:cut(f.apelido,40),r:f.raca,c:f.classe,l:f.nivel,M:f.M,R:f.R,I:f.I,L:f.L,
+   v:f.vida,V:f.vidaMax,p:f.pm,P:f.pmMax,s:f.ps,ar:f.arm,co:f.cobres,
+   pe:cut(f.pericias,120),ta:cut(f.talentos,700),ma:cut(f.magias,200),no:cut(f.notas,200),
+   it:(f.itens||[]).slice(0,25).map(function(x){return cut(x,60)}),
+   gr:(f.grim||[]).slice(0,20).map(function(x){return cut(x,40)}),
+   cm:(f.cm||[]).slice(0,6).map(function(x){return{n:cut(x.n,40),pm:x.pm,e:cut(x.e,100)}}),
+   w:ob.nome,t:Date.now()};
+  while(by(o)>MAXF&&o.ta.length>150)o.ta=cut(o.ta,o.ta.length-120);
+  while(by(o)>MAXF&&o.no.length>0)o.no=cut(o.no,Math.max(0,o.no.length-60));
+  return o}
+ function unpack(o){
+  return Object.assign(blank(),{nome:o.n||"",apelido:o.a||"",raca:o.r||"Humano",classe:o.c||"Briguento",nivel:o.l||1,
+   M:o.M|0,R:o.R|0,I:o.I|0,L:o.L|0,vida:o.v|0,vidaMax:o.V|0,pm:o.p|0,pmMax:o.P|0,ps:o.s|0,arm:o.ar|0,cobres:o.co|0,
+   pericias:o.pe||"",talentos:o.ta||"",magias:o.ma||"",notas:o.no||"",itens:o.it||[],grim:o.gr||[],cm:o.cm||[],h:[]})}
+ function vazia(f){return !f.nome&&!(f.h&&f.h.length)}
+
+ /* jogador -> sala */
+ window.OBpush=function(){if(!ob.pronto)return;clearTimeout(tm);tm=setTimeout(enviar,800)};
+ function enviar(){
+  if(vazia(s))return;
+  var o=pack(s),k=JSON.stringify(o,semT);
+  if(k===ultimo)return;
+  ultimo=k;
+  var u={};u[PRE+ob.id]=o;
+  OBR.room.setMetadata(u).catch(function(){
+   ultimo="";
+   if(!avisouErro){avisouErro=true;toastL("Não consegui sincronizar a ficha com a sala (limite de espaço?).")}})}
+
+ /* sala -> mestre */
+ function lerMeta(meta){
+  var f={};
+  Object.keys(meta||{}).forEach(function(k){if(k.indexOf(PRE)===0)f[k.slice(PRE.length)]=meta[k]});
+  ob.fichas=f;ob.bytes=by(meta||{});
+  if(typeof topTab!=="undefined"&&topTab==="o")OBdraw()}
+
+ /* se o navegador do iframe perdeu a ficha local, recupera a cópia da sala */
+ function restaurar(){
+  var c=ob.fichas[ob.id];
+  if(!c||!vazia(s))return;
+  s=unpack(c);FL.list[FL.cur]=s;
+  ultimo=JSON.stringify(pack(s),semT);
+  save();drawF();toastL("Ficha recuperada da sala.")}
+
+ function card(o){
+  var pv=o.V>0?Math.max(0,Math.min(100,Math.round(o.v/o.V*100))):0,cor=pv<=30?"#d9503c":"var(--ac)";
+  var mag=(o.gr||[]).map(function(n){var u=(o.cm||[]).filter(function(x){return x.n==n})[0];return esc(n)+(u?" (sua: "+esc(u.pm)+" PM)":"")}).join(", ");
+  var it=(o.it||[]).map(function(x){return esc(x)}).join(", ");
+  return '<div class="pc"><div class="ph"><b>'+esc(o.n||"Sem nome")+(o.a?" “"+esc(o.a)+"”":"")+'</b><span>'+esc(o.r)+" "+esc(o.c)+" · nível "+esc(o.l)+'</span></div>'
+   +'<div class="hh">Jogador: '+esc(o.w||"?")+'</div>'
+   +'<div class="bar"><i style="width:'+pv+'%;background:'+cor+'"></i></div>'
+   +'<div class="st"><div><b>'+esc(o.v)+"/"+esc(o.V)+'</b>Vida</div><div><b>'+esc(o.p)+"/"+esc(o.P)+'</b>PM</div><div><b>'+esc(o.s)+'</b>Sorte</div><div><b>+'+esc(o.ar)+'</b>Armad.</div></div>'
+   +'<div class="st"><div><b>'+esc(o.M)+'</b>Músculo</div><div><b>'+esc(o.R)+'</b>Reflexo</div><div><b>'+esc(o.I)+'</b>Miolo</div><div><b>'+esc(o.L)+'</b>Lábia</div></div>'
+   +'<details><summary>Perícias, talentos, magias e itens</summary>'
+   +'<p><b>Perícias:</b> '+esc(o.pe||"—")+'</p>'
+   +'<p><b>Talentos:</b><br>'+esc(o.ta||"—").replace(/\n/g,"<br>")+'</p>'
+   +'<p><b>Magias:</b> '+(mag||"—")+'</p>'
+   +'<p><b>Itens:</b> '+(it||"—")+" · Cobres "+esc(o.co)+'</p></details></div>'}
+
+ window.OBdraw=function(){
+  var el=document.getElementById("appO");if(!el)return;
+  var ids=Object.keys(ob.fichas).sort(function(a,b){return String(ob.fichas[a].n||"").localeCompare(String(ob.fichas[b].n||""))});
+  var h='<h2>Mesa</h2><div class="hint">Fichas dos jogadores, atualizadas em tempo real. Aqui você só vê; cada jogador edita a sua.</div>';
+  h+=ids.map(function(id){return card(ob.fichas[id])}).join("")||'<p class="hint">Nenhum jogador compartilhou uma ficha ainda.</p>';
+  var sem=ob.players.filter(function(p){return !ob.fichas[p.id]}).map(function(p){return esc(p.name||"Jogador")});
+  if(sem.length)h+='<p class="hh" style="margin-top:12px">Sem ficha compartilhada: '+sem.join(", ")+".</p>";
+  h+='<p class="hh">Espaço da sala usado por todas as extensões: '+(ob.bytes/1000).toFixed(1)+" de 16 kB ("+Math.round(ob.bytes/LIM*100)+"%)."+(ob.bytes/LIM>=.75?" Perto do limite: peça para enxugar textos longos.":"")+"</p>";
+  el.innerHTML=h};
+
+ /* rolagens aparecem como aviso para o resto da mesa */
+ window.OBroll=function(t,n1){if(!ob.pronto)return;try{OBR.broadcast.sendMessage(CH,{t:String(t).slice(0,240),n:!!n1})}catch(e){}};
+
+ function iniciar(){
+  var O=window.OBR;
+  if(O&&O.default&&!O.onReady)O=window.OBR=O.default;
+  if(!O||!O.onReady||O.isAvailable===false)return;
+  O.onReady(function(){
+   ob.id=O.player.id;
+   Promise.all([O.player.getRole(),O.player.getName(),O.room.getMetadata(),O.party.getPlayers().catch(function(){return[]})]).then(function(r){
+    ob.gm=r[0]==="GM";ob.nome=r[1]||"";ob.players=r[3]||[];
+    lerMeta(r[2]);restaurar();
+    ob.pronto=true;
+    drawTop();OBpush();
+    O.room.onMetadataChange(lerMeta);
+    O.player.onChange(function(p){
+     var g=p.role==="GM",mudou=g!==ob.gm;ob.gm=g;ob.nome=p.name||ob.nome;
+     if(mudou){if(!g&&topTab==="o")topTab="f";drawTop();if(g&&topTab==="o")OBdraw()}});
+    O.party.onChange(function(l){ob.players=l||[];if(topTab==="o")OBdraw()});
+    O.broadcast.onMessage(CH,function(ev){var d=ev&&ev.data;if(d&&d.t)O.notification.show(String(d.t).slice(0,240),d.n?"WARNING":"DEFAULT")});
+    try{var ap=function(t){document.documentElement.setAttribute("data-theme",String(t.mode).toLowerCase())};O.theme.getTheme().then(ap);O.theme.onChange(ap)}catch(e){}
+   }).catch(function(e){toastL("Não consegui ler os dados da sala.")})})}
+
+ function carregar(i){
+  if(window.OBR&&(window.OBR.onReady||window.OBR.default))return iniciar();
+  if(i>=SDKS.length)return;
+  var sc=document.createElement("script");sc.src=SDKS[i];
+  sc.onload=iniciar;sc.onerror=function(){carregar(i+1)};
+  document.head.appendChild(sc)}
+ carregar(0);
+})();
+</script></body></html>

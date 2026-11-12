@@ -1,0 +1,15 @@
+{
+  "name": "Encrenca! RPG de Bolso",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "description": "Sua ficha, dados, tabelas e Masmorra Infinita dentro do Owlbear. O mestre vê as fichas de todos.",
+  "author": "Mesa do Encrenca!",
+  "icon": "icon.svg",
+  "action": {
+    "title": "Encrenca!",
+    "icon": "icon.svg",
+    "popover": "index.html",
+    "width": 460,
+    "height": 720
+  }
+}
